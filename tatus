@@ -1,0 +1,5 @@
+[33m0974a39[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31mgong448/main[m[33m)[m fix: Resolve all critical errors and add test data
+[33ma8efab1[m fix: Resolve TypeScript build errors
+[33m360bffd[m cleanup: Remove all console.log statements from entire project
+[33md37d212[m[33m ([m[1;31mgong444/main[m[33m)[m debug: Featured/Events 필터링 로그 상세 출력 추가
+[33m869e10d[m fix: TypeScript 에러 수정 - 불필요한 hasFeatured/hasEvents 필드 제거
