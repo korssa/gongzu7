@@ -29,7 +29,7 @@ export default function ManifestoPage() {
       <div className="w-full max-w-2xl mx-auto px-8 sm:px-12 lg:px-16 py-16" style={{ maxWidth: '672px' }}>
         {/* 헤더 */}
         <div className="border-b border-gray-600 pb-4 mb-6" onMouseEnter={blockTranslationFeedback}>
-          <h1 className="text-3xl font-bold text-white mb-2" translate="no">"We're just. that kind of group!"</h1>
+          <h1 className="text-3xl font-bold text-white mb-2" translate="no">&ldquo;We&apos;re just. that kind of group!&rdquo;</h1>
           <div className="flex items-center gap-4 text-gray-400 text-sm">
             <span className="flex items-center gap-1"><User className="h-4 w-4" /><span translate="no">Gongmyung Team</span></span>
             <span className="flex items-center gap-1"><Calendar className="h-4 w-4" />{new Date().toLocaleDateString()}</span>
@@ -52,7 +52,7 @@ app development world with our unique approach to user experience and design.
 
 💡 Our Philosophy
 
-"We're just. that kind of group!" - This isn't just a slogan, it's our identity. 
+&ldquo;We&apos;re just. that kind of group!&rdquo; - This isn&apos;t just a slogan, it&apos;s our identity. 
 We're the kind of group that:
 
 • Thinks outside the box and challenges conventional wisdom
@@ -90,7 +90,7 @@ We're always excited to hear from like-minded individuals and organizations.
 ---
 
 © 2025 Gongmyung. All rights reserved.
-"We're just. that kind of group!" — Since 2025`}
+&ldquo;We&apos;re just. that kind of group!&rdquo; — Since 2025`}
           </pre>
         </article>
       </div>

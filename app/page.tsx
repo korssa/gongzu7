@@ -891,7 +891,7 @@ export default function Home() {
 
          {/* ✅ 👇 여기부터 붙이세요 */}
          <div className="text-center mt-32 space-y-2">
-           <h1 className="text-2xl font-bold text-white">"We're just. that kind of group!"</h1>
+           <h1 className="text-2xl font-bold text-white">&ldquo;We&apos;re just. that kind of group!&rdquo;</h1>
            <p className="text-sm text-gray-400">— SINCE 2025</p>
            <button
              onClick={() => {

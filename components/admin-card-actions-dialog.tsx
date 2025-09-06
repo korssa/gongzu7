@@ -202,7 +202,7 @@ export function AdminCardActionsDialog({
                 onMouseEnter={blockTranslationFeedback}
               />
               <p className="text-xs text-gray-500" onMouseEnter={blockTranslationFeedback}>
-                이 링크는 관리자만 볼 수 있으며, Events 앱의 "See App" 버튼에 사용됩니다.
+                이 링크는 관리자만 볼 수 있으며, Events 앱의 &ldquo;See App&rdquo; 버튼에 사용됩니다.
               </p>
             </div>
           )}
