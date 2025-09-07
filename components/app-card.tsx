@@ -54,10 +54,15 @@ export function AppCard({ app, viewMode, onDelete, onEdit, onToggleFeatured, onT
   };
 
   const handleStoreView = () => {
-    // Events 앱이고 관리자 링크가 있으면 관리자 링크 사용, 아니면 기본 링크 사용
-    const urlToUse = (isEvent && app.adminStoreUrl) ? app.adminStoreUrl : app.storeUrl;
-    if (urlToUse) {
-      window.open(urlToUse, '_blank');
+    // Events 앱이면 memo2로 이동, 아니면 기존 로직 사용
+    if (isEvent) {
+      window.open('/memo2', '_blank');
+    } else {
+      // 일반 앱은 기존 로직 사용
+      const urlToUse = app.storeUrl;
+      if (urlToUse) {
+        window.open(urlToUse, '_blank');
+      }
     }
   };
 
