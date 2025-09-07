@@ -7,9 +7,6 @@
   "functions": {
     "app/api/**/*.ts": {
       "maxDuration": 30
-    },
-    "app/manifest.ts": {
-      "maxDuration": 10
     }
   },
   "env": {
