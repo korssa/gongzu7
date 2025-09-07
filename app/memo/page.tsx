@@ -155,12 +155,12 @@ export default function MemoPage() {
       // 유성 처리 (크기와 꼬리 개선)
       try {
         meteorTimer++;
-        if (meteorTimer > 400 && !meteor) { // 6.7초마다 유성 생성
+        if (meteorTimer > 600 && !meteor) { // 10초마다 유성 생성 (더 느리게)
           meteor = {
             x: canvas.width * 0.9,
             y: -30,
-            vx: -12,
-            vy: 8,
+            vx: -6,  // 속도 절반으로 감소
+            vy: 4,   // 속도 절반으로 감소
             life: 1,
             trail: []
           };
@@ -171,7 +171,7 @@ export default function MemoPage() {
         // 유성 이동
         meteor.x += meteor.vx;
         meteor.y += meteor.vy;
-        meteor.life -= 0.015;
+        meteor.life -= 0.008; // 생명력 감소 속도 느리게
         
         // 꼬리 추가 (더 자주, 더 길게)
         meteor.trail.push({ x: meteor.x, y: meteor.y, life: 1 });
@@ -702,7 +702,6 @@ export default function MemoPage() {
         `}} />
 
         <canvas id="skyCanvas"></canvas>
-        <div className="moon"></div>
         <SoftGlowStar />
         
         <div className="container mx-auto py-6 max-w-6xl px-4 relative z-10">
