@@ -83,10 +83,7 @@ export default function MemoPage() {
       x: number; y: number; r: number; p: number; twinkleSpeed: number;
       xPercent: number; yPercent: number; // 퍼센트 기반 위치 저장
     }> = [];
-    let crossStars: Array<{
-      x: number; y: number; size: number; phase: number; tingInterval: number; lastTing: number;
-      xPercent: number; yPercent: number; // 퍼센트 기반 위치 저장
-    }> = [];
+    // crossStars 배열 제거됨 - CSS Soft Glow Star로 대체
 
     // 별과 십자별 초기화 함수
     function initializeStars() {
@@ -104,20 +101,7 @@ export default function MemoPage() {
         };
       });
 
-      crossStars = Array.from({ length: 5 }, () => {
-        const xPercent = rand(0.1, 0.9);
-        const yPercent = rand(0.1, 0.9);
-        return {
-          x: xPercent * canvas.width,
-          y: yPercent * canvas.height,
-          size: rand(12, 20),
-          phase: Math.random() * Math.PI * 2,
-          tingInterval: rand(3000, 8000),
-          lastTing: 0,
-          xPercent,
-          yPercent
-        };
-      });
+      // crossStars 초기화 제거됨 - CSS Soft Glow Star로 대체
     }
 
     // 화면 크기 변경 시 별 위치 재계산
@@ -129,10 +113,7 @@ export default function MemoPage() {
           star.r = rand(0.8, 2.2);
         });
 
-        crossStars.forEach(cross => {
-          cross.x = cross.xPercent * canvas.width;
-          cross.y = cross.yPercent * canvas.height;
-        });
+        // crossStars 위치 업데이트 제거됨 - CSS Soft Glow Star로 대체
       } catch (error) {
         console.warn('Star position update error:', error);
       }
@@ -168,104 +149,7 @@ export default function MemoPage() {
         console.warn('Star drawing error:', error);
       }
 
-      // 십자별 그리기 (아름다운 금색 광선 효과)
-      try {
-        const currentTime = Date.now();
-        crossStars.forEach(cross => {
-        const timeSinceLastTing = currentTime - cross.lastTing;
-        const shouldTing = timeSinceLastTing > cross.tingInterval;
-        
-        if (shouldTing) {
-          cross.lastTing = currentTime;
-        }
-        
-        // 팅 효과 계산 (팅 후 1.5초간 지속)
-        const tingProgress = Math.min(timeSinceLastTing / 1500, 1);
-        const tingIntensity = shouldTing ? 1 : Math.max(0, 1 - tingProgress);
-        
-        if (tingIntensity > 0) {
-          // 메인 십자가 (세로, 가로) - 길게, 흰색
-          ctx.strokeStyle = `rgba(255,255,255,${tingIntensity * 0.8})`;
-          ctx.lineWidth = 2.5;
-          ctx.lineCap = 'round';
-          
-          const mainCrossSize = cross.size * 1.2; // 십자를 더 길게
-          ctx.beginPath();
-          ctx.moveTo(cross.x, cross.y - mainCrossSize);
-          ctx.lineTo(cross.x, cross.y + mainCrossSize);
-          ctx.moveTo(cross.x - mainCrossSize, cross.y);
-          ctx.lineTo(cross.x + mainCrossSize, cross.y);
-          ctx.stroke();
-          
-          // 8방향 금색 광선 (짧게, 금색)
-          const raySize = cross.size * 0.4; // 십자 사이 빛은 짧게
-          const rayPositions = [
-            { x: cross.x + raySize, y: cross.y - raySize }, // 우상단
-            { x: cross.x + raySize, y: cross.y + raySize }, // 우하단
-            { x: cross.x - raySize, y: cross.y + raySize }, // 좌하단
-            { x: cross.x - raySize, y: cross.y - raySize }, // 좌상단
-            { x: cross.x + raySize * 1.2, y: cross.y }, // 우측
-            { x: cross.x, y: cross.y + raySize * 1.2 }, // 하단
-            { x: cross.x - raySize * 1.2, y: cross.y }, // 좌측
-            { x: cross.x, y: cross.y - raySize * 1.2 }  // 상단
-          ];
-          
-          rayPositions.forEach((pos, i) => {
-            const rayAlpha = tingIntensity * (0.9 - i * 0.08);
-            
-            // 진짜 별이 반짝이는 효과 - 여러 개의 작은 별들
-            const starCount = 3 + Math.floor(Math.random() * 3); // 3-5개의 작은 별
-            for (let j = 0; j < starCount; j++) {
-              const starOffset = (Math.random() - 0.5) * raySize * 0.8;
-              const starX = pos.x + starOffset;
-              const starY = pos.y + starOffset;
-              const starSize = raySize * (0.3 + Math.random() * 0.4);
-              const starTwinkle = Math.sin(Date.now() * 0.005 + j * 0.5) * 0.5 + 0.5;
-              
-              // 별의 반짝임 효과
-              const starAlpha = rayAlpha * starTwinkle * (0.7 + Math.random() * 0.3);
-              
-              // 금색 그라디언트 (별 모양)
-              const gradient = ctx.createRadialGradient(starX, starY, 0, starX, starY, starSize);
-              gradient.addColorStop(0, `rgba(255,215,0,${starAlpha})`); // 금색 중심
-              gradient.addColorStop(0.3, `rgba(255,255,100,${starAlpha * 0.8})`); // 연금색
-              gradient.addColorStop(0.7, `rgba(255,255,200,${starAlpha * 0.5})`); // 연한 금색
-              gradient.addColorStop(1, `rgba(255,255,255,${starAlpha * 0.2})`); // 흰색 외곽
-              
-              ctx.fillStyle = gradient;
-              ctx.beginPath();
-              ctx.arc(starX, starY, starSize, 0, Math.PI * 2);
-              ctx.fill();
-              
-              // 별의 글로우 효과 (반짝임)
-              ctx.shadowColor = `rgba(255,215,0,${starAlpha * 0.6})`;
-              ctx.shadowBlur = 6 + starTwinkle * 4; // 반짝임에 따라 글로우 강도 변화
-              ctx.beginPath();
-              ctx.arc(starX, starY, starSize * 0.6, 0, Math.PI * 2);
-              ctx.fill();
-              ctx.shadowBlur = 0;
-              
-              // 별의 십자 광선 효과
-              if (starTwinkle > 0.7) {
-                ctx.strokeStyle = `rgba(255,215,0,${starAlpha * 0.8})`;
-                ctx.lineWidth = 1;
-                ctx.lineCap = 'round';
-                
-                const crossLength = starSize * 1.5;
-                ctx.beginPath();
-                ctx.moveTo(starX - crossLength, starY);
-                ctx.lineTo(starX + crossLength, starY);
-                ctx.moveTo(starX, starY - crossLength);
-                ctx.lineTo(starX, starY + crossLength);
-                ctx.stroke();
-              }
-            }
-          });
-        }
-      });
-      } catch (error) {
-        console.warn('Cross star drawing error:', error);
-      }
+      // 십자별은 이제 CSS Soft Glow Star로 대체됨
 
       // 유성 처리 (크기와 꼬리 개선)
       try {
