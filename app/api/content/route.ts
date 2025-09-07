@@ -65,7 +65,7 @@ async function saveContents(contents: ContentItem[]) {
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
-    const type = searchParams.get('type') as 'appstory' | 'news' | null;
+    const type = searchParams.get('type') as 'appstory' | 'news' | 'memo' | null;
     const published = searchParams.get('published');
     
     // 프로덕션에서는 메모리 저장소만 사용 (무한 재귀 방지)
@@ -118,9 +118,9 @@ export async function POST(request: NextRequest) {
     
     const contents = await loadContents();
     
-    // ID 범위 분리: App Story (1-9999), News (10000-19999)
-    const baseId = body.type === 'appstory' ? 1 : 10000;
-    const maxId = body.type === 'appstory' ? 9999 : 19999;
+    // ID 범위 분리: App Story (1-9999), News (10000-19999), Memo (20000-29999)
+    const baseId = body.type === 'appstory' ? 1 : body.type === 'news' ? 10000 : 20000;
+    const maxId = body.type === 'appstory' ? 9999 : body.type === 'news' ? 19999 : 29999;
     
     // 기존 ID와 겹치지 않는 고유 ID 생성
     let id: string;
