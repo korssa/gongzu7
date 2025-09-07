@@ -127,8 +127,14 @@ export default function MemoPage() {
     let meteorTimer = 0;
 
     // ========== Animation Loop ==========
-    function animate() {
+    let lastTime = 0;
+    function animate(currentTime: number) {
       if (!ctx || !canvas) return;
+      
+      // 델타타임 계산 (프레임레이트 독립적)
+      const deltaTime = currentTime - lastTime;
+      lastTime = currentTime;
+      const deltaFactor = deltaTime / 16.67; // 60fps 기준 정규화
       
       try {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -154,8 +160,8 @@ export default function MemoPage() {
 
       // 유성 처리 (크기와 꼬리 개선)
       try {
-        meteorTimer++;
-        if (meteorTimer > 600 && !meteor) { // 10초마다 유성 생성 (더 느리게)
+        meteorTimer += deltaFactor;
+        if (meteorTimer > 600 && !meteor) { // 10초마다 유성 생성 (더 느리게, 델타타임 적용)
           meteor = {
             x: canvas.width * 0.9,
             y: -30,
@@ -168,10 +174,10 @@ export default function MemoPage() {
         }
 
       if (meteor) {
-        // 유성 이동
-        meteor.x += meteor.vx;
-        meteor.y += meteor.vy;
-        meteor.life -= 0.008; // 생명력 감소 속도 느리게
+        // 유성 이동 (델타타임 적용)
+        meteor.x += meteor.vx * deltaFactor;
+        meteor.y += meteor.vy * deltaFactor;
+        meteor.life -= 0.008 * deltaFactor; // 생명력 감소 속도 느리게, 델타타임 적용
         
         // 꼬리 추가 (더 자주, 더 길게)
         meteor.trail.push({ x: meteor.x, y: meteor.y, life: 1 });
@@ -191,7 +197,7 @@ export default function MemoPage() {
           
           ctx.fillStyle = gradient;
           ctx.fillRect(point.x - 2, point.y - 2, 4, 4);
-          point.life -= 0.08;
+          point.life -= 0.08 * deltaFactor;
         });
         
         // 유성 머리 그리기 (더 크게)
@@ -223,7 +229,7 @@ export default function MemoPage() {
     // 애니메이션 시작을 지연시켜 안정성 향상
     setTimeout(() => {
       try {
-        animate();
+        animate(performance.now());
       } catch (error) {
         console.warn('Animation start error:', error);
       }
