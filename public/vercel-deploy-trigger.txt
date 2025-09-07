@@ -1,4 +1,2 @@
-Vercel 배포 트리거 파일
-GitHub 저장소: korssa/gongzu
-프로젝트: Gongmyung App Gallery
-배포 시간: 2025-01-27
+Deploy trigger: ${Date.now()}
+Force new deployment
