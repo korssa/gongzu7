@@ -71,16 +71,16 @@ export function MailForm({ type, buttonText, buttonDescription, onMouseEnter }: 
     setIsSubmitting(true);
 
     try {
-      // 번역 피드백 차단
+      // Block translation feedback
       if (onMouseEnter) {
         onMouseEnter();
       }
 
-      // API 엔드포인트 호출
+      // Call API endpoint
       const response = await fetch('/api/send-mail', {
         method: 'POST',
         headers: {
-          // FormData를 사용할 때는 Content-Type을 설정하지 않음 (브라우저가 자동으로 설정)
+          // Don't set Content-Type when using FormData (browser sets it automatically)
         },
         body: (() => {
           const formDataToSend = new FormData();
@@ -99,7 +99,7 @@ export function MailForm({ type, buttonText, buttonDescription, onMouseEnter }: 
         })(),
       });
 
-      // 응답 텍스트 먼저 확인
+      // Check response text first
       const responseText = await response.text();
       let result;
       
@@ -114,7 +114,7 @@ export function MailForm({ type, buttonText, buttonDescription, onMouseEnter }: 
         throw new Error(result.error || 'Failed to send message.');
       }
 
-             // 성공 시 폼 초기화
+             // Reset form on success
                setFormData({
           name: "",
           email: "",
@@ -125,14 +125,14 @@ export function MailForm({ type, buttonText, buttonDescription, onMouseEnter }: 
         setSelectedFile(null);
       setIsOpen(false);
       
-      // 성공 메시지 (Events 타입이 아닐 때만)
+      // Success message (only when not Events type)
       if (type !== "events") {
         alert(result.message || "Message sent successfully!");
       }
                } catch (err) {
          
              
-                 // 더 자세한 오류 정보 표시
+                 // Display more detailed error information
                  let errorMessage = "Failed to send message. Please try again.";
                  if (err instanceof Error) {
                    errorMessage = err.message;
@@ -308,7 +308,7 @@ export function MailForm({ type, buttonText, buttonDescription, onMouseEnter }: 
               />
                          </div>
 
-             {/* Contact Us용 이미지 첨부 */}
+             {/* Image attachment for Contact Us */}
              {type === "contact" && (
                <div>
                  <label className="block text-xs font-medium text-gray-300 mb-2">
@@ -349,7 +349,7 @@ export function MailForm({ type, buttonText, buttonDescription, onMouseEnter }: 
                </div>
              )}
 
-             {/* 이벤트용 체크박스 */}
+             {/* Checkbox for events */}
             {type === "events" && (
               <div className="mt-4">
                                  <label className="flex items-start space-x-2 text-sm text-gray-400">
