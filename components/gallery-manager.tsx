@@ -131,12 +131,11 @@ export function GalleryManager({
       if (confirm(`"${item?.title}"을(를) 삭제하시겠습니까?`)) {
         try {
           // API 호출로 삭제
-          const response = await fetch('/api/delete-file', {
+          const response = await fetch(`/api/gallery?type=${type}&id=${itemId}`, {
             method: 'DELETE',
             headers: {
               'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ id: itemId, type: type }),
           });
 
           if (response.ok) {

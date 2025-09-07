@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { list, put } from '@vercel/blob';
+import { list, put, del } from '@vercel/blob';
 
 // 갤러리 아이템 타입
 export interface GalleryItem {
@@ -134,5 +134,53 @@ export async function POST(request: NextRequest) {
   } catch (error) {
     console.error('갤러리 생성 오류:', error);
     return NextResponse.json({ error: '갤러리 생성 실패' }, { status: 500 });
+  }
+}
+
+// DELETE: 갤러리 아이템 삭제
+export async function DELETE(request: NextRequest) {
+  try {
+    const { searchParams } = new URL(request.url);
+    const type = searchParams.get('type') as 'gallery' | 'featured' | 'events' | null;
+    const id = searchParams.get('id');
+
+    if (!type || !id) {
+      return NextResponse.json({ error: 'Type and ID parameters are required' }, { status: 400 });
+    }
+
+    // Vercel Blob에서 해당 타입의 폴더 조회
+    const folderPath = `gallery-${type}`;
+    const { blobs } = await list({
+      prefix: `${folderPath}/`,
+    });
+
+    // 해당 ID의 JSON 파일 찾기
+    const jsonFile = blobs.find(blob => 
+      blob.pathname.endsWith('.json') && 
+      blob.pathname.includes(id)
+    );
+
+    if (!jsonFile) {
+      return NextResponse.json({ error: 'Item not found' }, { status: 404 });
+    }
+
+    // JSON 파일 삭제
+    await del(jsonFile.url);
+
+    // 이미지 파일도 삭제 (있는 경우)
+    const imageFile = blobs.find(blob => 
+      blob.pathname.includes(id) && 
+      !blob.pathname.endsWith('.json')
+    );
+
+    if (imageFile) {
+      await del(imageFile.url);
+    }
+
+    return NextResponse.json({ success: true, message: 'Item deleted successfully' });
+
+  } catch (error) {
+    console.error('갤러리 삭제 오류:', error);
+    return NextResponse.json({ error: '갤러리 삭제 실패' }, { status: 500 });
   }
 }
