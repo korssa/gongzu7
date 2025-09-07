@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Calendar, User, Eye, ArrowLeft, Upload } from "lucide-react";
+import { Calendar, User, Eye, ArrowLeft, Upload, Trash2 } from "lucide-react";
 import { uploadFile } from "@/lib/storage-adapter";
 import { blockTranslationFeedback, createAdminButtonHandler } from "@/lib/translation-utils";
 import { AdminUploadDialog } from "./admin-upload-dialog";
@@ -122,6 +122,37 @@ export function GalleryManager({
       );
       return updated;
     });
+  };
+
+  // 삭제 핸들러
+  const handleDelete = (itemId: string) => {
+    createAdminButtonHandler(async () => {
+      const item = items.find(item => item.id === itemId);
+      if (confirm(`"${item?.title}"을(를) 삭제하시겠습니까?`)) {
+        try {
+          // API 호출로 삭제
+          const response = await fetch('/api/delete-file', {
+            method: 'DELETE',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ id: itemId, type: type }),
+          });
+
+          if (response.ok) {
+            // 로컬 상태에서 제거
+            setItems(prev => prev.filter(item => item.id !== itemId));
+            console.log(`✅ ${type} 아이템 삭제 완료:`, itemId);
+          } else {
+            console.error('삭제 실패:', response.statusText);
+            alert('삭제에 실패했습니다.');
+          }
+        } catch (error) {
+          console.error('삭제 중 오류:', error);
+          alert('삭제 중 오류가 발생했습니다.');
+        }
+      }
+    })();
   };
 
   // 업로드 성공 핸들러
@@ -283,6 +314,21 @@ export function GalleryManager({
                     {item.type}
                   </Badge>
                 </div>
+
+                {/* Delete Button - Admin Only */}
+                {isAdmin && (
+                  <div className="absolute top-2 right-2">
+                    <Button
+                      size="sm"
+                      variant="destructive"
+                      className="h-6 w-6 p-0 opacity-0 group-hover:opacity-100 transition-opacity duration-200"
+                      onClick={() => handleDelete(item.id)}
+                      onMouseEnter={blockTranslationFeedback}
+                    >
+                      <Trash2 className="h-3 w-3" />
+                    </Button>
+                  </div>
+                )}
               </div>
 
               <CardContent className="px-2 py-0" style={{ backgroundColor: '#D1E2EA' }}>
