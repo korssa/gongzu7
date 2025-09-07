@@ -72,9 +72,11 @@ export async function GET() {
             const json = await res.json();
             const data = Array.isArray(json) ? (json as ContentItem[]) : [];
             
-            // App Story 전용 디버깅
+            // 콘텐츠 타입별 디버깅
             const appStoryCount = data.filter(c => c.type === 'appstory').length;
             const newsCount = data.filter(c => c.type === 'news').length;
+            const memoCount = data.filter(c => c.type === 'memo').length;
+            console.log(`[Contents Blob] 로드된 콘텐츠: App Story: ${appStoryCount}, News: ${newsCount}, Memo: ${memoCount}`);
             
             return NextResponse.json(data);
           }
@@ -87,9 +89,11 @@ export async function GET() {
       // 2) 메모리 폴백
       if (memoryContents.length > 0) {
         
-        // App Story 전용 디버깅
+        // 콘텐츠 타입별 디버깅
         const appStoryCount = memoryContents.filter(c => c.type === 'appstory').length;
         const newsCount = memoryContents.filter(c => c.type === 'news').length;
+        const memoCount = memoryContents.filter(c => c.type === 'memo').length;
+        console.log(`[Contents Memory] 로드된 콘텐츠: App Story: ${appStoryCount}, News: ${newsCount}, Memo: ${memoCount}`);
         
         return NextResponse.json(memoryContents);
       }
@@ -120,10 +124,11 @@ export async function POST(request: NextRequest) {
         try {
           console.log(`[Contents Blob] 저장 시도 ${attempt}/3`);
           
-          // App Story 전용 디버깅
+          // 콘텐츠 타입별 디버깅
           const appStoryCount = contents.filter(c => c.type === 'appstory').length;
           const newsCount = contents.filter(c => c.type === 'news').length;
-          console.log(`[Contents Blob] App Story: ${appStoryCount}, News: ${newsCount}`);
+          const memoCount = contents.filter(c => c.type === 'memo').length;
+          console.log(`[Contents Blob] 저장할 콘텐츠: App Story: ${appStoryCount}, News: ${newsCount}, Memo: ${memoCount}`);
           
           await put(CONTENTS_FILE_NAME, JSON.stringify(contents, null, 2), {
             access: 'public',

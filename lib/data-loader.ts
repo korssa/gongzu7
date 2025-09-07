@@ -89,7 +89,7 @@ export async function saveContentsToBlob(contents: ContentItem[]): Promise<boole
 /**
  * 타입별로 콘텐츠를 분리해서 저장
  */
-export async function saveContentsByTypeToBlob(type: 'appstory' | 'news', contents: ContentItem[]): Promise<boolean> {
+export async function saveContentsByTypeToBlob(type: 'appstory' | 'news' | 'memo', contents: ContentItem[]): Promise<boolean> {
   try {
     const response = await fetch(`/api/content/type?type=${type}`, {
       method: 'POST',
@@ -114,7 +114,7 @@ export async function saveContentsByTypeToBlob(type: 'appstory' | 'news', conten
 /**
  * 타입별로 콘텐츠를 분리해서 로드
  */
-export async function loadContentsByTypeFromBlob(type: 'appstory' | 'news'): Promise<ContentItem[]> {
+export async function loadContentsByTypeFromBlob(type: 'appstory' | 'news' | 'memo'): Promise<ContentItem[]> {
   try {
     const response = await fetch(`/api/content/type?type=${type}`);
     if (!response.ok) {

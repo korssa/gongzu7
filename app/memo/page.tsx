@@ -96,17 +96,24 @@ export default function MemoPage() {
         
         // 먼저 Vercel Blob Storage에서 로드 시도
         const blobContents = await loadContentsFromBlob();
+        console.log('📝 [Memo] Blob에서 로드된 전체 콘텐츠:', blobContents.length, '개');
+        
         const filteredBlobContents = blobContents.filter((c: ContentItem) => c.type === 'memo');
+        console.log('📝 [Memo] 필터링된 memo 콘텐츠:', filteredBlobContents.length, '개');
         
         if (filteredBlobContents.length > 0) {
           // 관리자일 경우 전체 콘텐츠, 일반 사용자는 게시된 콘텐츠만 표시
-          setContents(isAuthenticated ? filteredBlobContents : filteredBlobContents.filter((c: ContentItem) => c.isPublished));
+          const finalContents = isAuthenticated ? filteredBlobContents : filteredBlobContents.filter((c: ContentItem) => c.isPublished);
+          setContents(finalContents);
+          console.log('📝 [Memo] 최종 설정된 콘텐츠:', finalContents.length, '개');
         } else {
           // Blob에 데이터가 없으면 기존 API 사용
+          console.log('📝 [Memo] Blob에 memo 데이터 없음, API로 폴백...');
           const res = await fetch(`/api/content?type=memo`);
           const data = await res.json();
-          // 관리자일 경우 전체 콘텐츠, 일반 사용자는 게시된 콘텐츠만 표시
-          setContents(isAuthenticated ? data : data.filter((c: ContentItem) => c.isPublished));
+          const finalContents = isAuthenticated ? data : data.filter((c: ContentItem) => c.isPublished);
+          setContents(finalContents);
+          console.log('📝 [Memo] API에서 로드된 콘텐츠:', finalContents.length, '개');
         }
       } catch (err) {
         // Failed to load contents
