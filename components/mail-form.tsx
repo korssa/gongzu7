@@ -206,7 +206,7 @@ export function MailForm({ type, buttonText, buttonDescription, onMouseEnter }: 
                  <form onSubmit={handleSubmit} className="space-y-3 mt-3">
            <div className="grid grid-cols-2 gap-3">
              <div>
-                                <label htmlFor="name" className="block text-xs font-medium text-gray-300 mb-1">
+                                <label htmlFor="name" className="block text-xs font-medium text-gray-300 mb-1" onMouseEnter={blockTranslationFeedback}>
                    Name *
                  </label>
                <Input
@@ -220,7 +220,7 @@ export function MailForm({ type, buttonText, buttonDescription, onMouseEnter }: 
                />
              </div>
              <div>
-                                <label htmlFor="email" className="block text-xs font-medium text-gray-300 mb-1">
+                                <label htmlFor="email" className="block text-xs font-medium text-gray-300 mb-1" onMouseEnter={blockTranslationFeedback}>
                    Email *
                  </label>
                <Input
@@ -237,13 +237,14 @@ export function MailForm({ type, buttonText, buttonDescription, onMouseEnter }: 
           
                                {type === "events" ? (
             <div>
-                             <label className="block text-xs font-medium text-gray-300 mb-2">
+                             <label className="block text-xs font-medium text-gray-300 mb-2" onMouseEnter={blockTranslationFeedback}>
                  Event App *
                </label>
               <div className="grid grid-cols-3 gap-2">
                 <button
                   type="button"
                   onClick={createAdminButtonHandler(() => handleInputChange("subject", "Event App 1"))}
+                  onMouseEnter={blockTranslationFeedback}
                                      className={`px-3 py-2 text-sm rounded border transition-colors ${
                      formData.subject === "Event App 1" 
                        ? "bg-amber-500 border-amber-500 text-white" 
@@ -255,6 +256,7 @@ export function MailForm({ type, buttonText, buttonDescription, onMouseEnter }: 
                 <button
                   type="button"
                   onClick={createAdminButtonHandler(() => handleInputChange("subject", "Event App 2"))}
+                  onMouseEnter={blockTranslationFeedback}
                                      className={`px-3 py-2 text-sm rounded border transition-colors ${
                      formData.subject === "Event App 2" 
                        ? "bg-amber-500 border-amber-500 text-white" 
@@ -266,6 +268,7 @@ export function MailForm({ type, buttonText, buttonDescription, onMouseEnter }: 
                 <button
                   type="button"
                   onClick={createAdminButtonHandler(() => handleInputChange("subject", "Event App 3"))}
+                  onMouseEnter={blockTranslationFeedback}
                                      className={`px-3 py-2 text-sm rounded border transition-colors ${
                      formData.subject === "Event App 3" 
                        ? "bg-amber-500 border-amber-500 text-white" 
@@ -278,7 +281,7 @@ export function MailForm({ type, buttonText, buttonDescription, onMouseEnter }: 
             </div>
           ) : (
             <div>
-                             <label htmlFor="subject" className="block text-xs font-medium text-gray-300 mb-1">
+                             <label htmlFor="subject" className="block text-xs font-medium text-gray-300 mb-1" onMouseEnter={blockTranslationFeedback}>
                  Subject *
                </label>
               <Input
@@ -294,7 +297,7 @@ export function MailForm({ type, buttonText, buttonDescription, onMouseEnter }: 
           )}
            
                                    <div>
-                             <label htmlFor="message" className="block text-xs font-medium text-gray-300 mb-1">
+                             <label htmlFor="message" className="block text-xs font-medium text-gray-300 mb-1" onMouseEnter={blockTranslationFeedback}>
                  Message {type === "events" ? "(optional)" : "*"}
                </label>
               <Textarea
@@ -311,7 +314,7 @@ export function MailForm({ type, buttonText, buttonDescription, onMouseEnter }: 
              {/* Image attachment for Contact Us */}
              {type === "contact" && (
                <div>
-                 <label className="block text-xs font-medium text-gray-300 mb-2">
+                 <label className="block text-xs font-medium text-gray-300 mb-2" onMouseEnter={blockTranslationFeedback}>
                    Attach Image (optional)
                  </label>
                  <div className="space-y-2">
@@ -326,6 +329,7 @@ export function MailForm({ type, buttonText, buttonDescription, onMouseEnter }: 
                      <button
                        type="button"
                        onClick={createAdminButtonHandler(() => document.getElementById('file-input')?.click())}
+                       onMouseEnter={blockTranslationFeedback}
                        className="px-3 py-2 text-sm bg-gray-800 border border-gray-600 text-gray-300 hover:border-amber-400 rounded transition-colors"
                      >
                        Choose Image
@@ -334,6 +338,7 @@ export function MailForm({ type, buttonText, buttonDescription, onMouseEnter }: 
                                             <button
                        type="button"
                        onClick={createAdminButtonHandler(removeFile)}
+                       onMouseEnter={blockTranslationFeedback}
                        className="px-3 py-2 text-sm bg-red-600 border border-red-600 text-white hover:bg-red-700 rounded transition-colors"
                      >
                        Remove
@@ -352,7 +357,7 @@ export function MailForm({ type, buttonText, buttonDescription, onMouseEnter }: 
              {/* Checkbox for events */}
             {type === "events" && (
               <div className="mt-4">
-                                 <label className="flex items-start space-x-2 text-sm text-gray-400">
+                                 <label className="flex items-start space-x-2 text-sm text-gray-400" onMouseEnter={blockTranslationFeedback}>
                   <input
                     type="checkbox"
                     required
@@ -374,6 +379,7 @@ export function MailForm({ type, buttonText, buttonDescription, onMouseEnter }: 
                             <Button
                  type="submit"
                  disabled={isSubmitting}
+                 onMouseEnter={blockTranslationFeedback}
                  className="flex-1 bg-amber-500 hover:bg-amber-600 text-white font-medium"
                >
                                 {isSubmitting ? (
@@ -393,6 +399,7 @@ export function MailForm({ type, buttonText, buttonDescription, onMouseEnter }: 
                  type="button"
                  variant="outline"
                  onClick={createAdminButtonHandler(() => setIsOpen(false))}
+                 onMouseEnter={blockTranslationFeedback}
                  className="border-gray-600 text-gray-300 hover:bg-gray-800"
                >
                <X className="h-4 w-4" />
