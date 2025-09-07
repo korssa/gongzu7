@@ -12,22 +12,10 @@ const LOCAL_CONTENTS_PATH = path.join(process.cwd(), 'data', 'contents.json');
 // /api/content의 메모리와 동기화하기 위한 공유 저장소
 let memoryContents: ContentItem[] = [];
 
-// /api/content의 메모리와 동기화하는 함수
+// /api/content의 메모리와 동기화하는 함수 (무한 재귀 방지)
 async function syncWithContentMemory(): Promise<ContentItem[]> {
-  try {
-    // /api/content에서 현재 메모리 상태 조회
-    const origin = process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000';
-    const res = await fetch(`${origin}/api/content`, { cache: 'no-store' });
-    if (res.ok) {
-      const contentMemory = await res.json();
-      if (Array.isArray(contentMemory)) {
-        memoryContents = [...contentMemory];
-        return memoryContents;
-      }
-    }
-  } catch (error) {
-    console.warn('Failed to sync with /api/content memory:', error);
-  }
+  // 무한 재귀 방지를 위해 동기화 비활성화
+  // /api/content와 /api/data/contents 간의 순환 호출 방지
   return memoryContents;
 }
 

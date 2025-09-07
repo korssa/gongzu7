@@ -94,29 +94,31 @@ export default function MemoPage() {
       try {
         setLoading(true);
         
-        // 먼저 Vercel Blob Storage에서 로드 시도
-        const blobContents = await loadContentsFromBlob();
-        console.log('📝 [Memo] Blob에서 로드된 전체 콘텐츠:', blobContents.length, '개');
+        // 먼저 기존 API에서 memo 타입 콘텐츠 로드 시도
+        console.log('📝 [Memo] API에서 memo 콘텐츠 로드 시도...');
+        const res = await fetch(`/api/content?type=memo`);
         
-        const filteredBlobContents = blobContents.filter((c: ContentItem) => c.type === 'memo');
-        console.log('📝 [Memo] 필터링된 memo 콘텐츠:', filteredBlobContents.length, '개');
-        
-        if (filteredBlobContents.length > 0) {
-          // 관리자일 경우 전체 콘텐츠, 일반 사용자는 게시된 콘텐츠만 표시
-          const finalContents = isAuthenticated ? filteredBlobContents : filteredBlobContents.filter((c: ContentItem) => c.isPublished);
-          setContents(finalContents);
-          console.log('📝 [Memo] 최종 설정된 콘텐츠:', finalContents.length, '개');
-        } else {
-          // Blob에 데이터가 없으면 기존 API 사용
-          console.log('📝 [Memo] Blob에 memo 데이터 없음, API로 폴백...');
-          const res = await fetch(`/api/content?type=memo`);
+        if (res.ok) {
           const data = await res.json();
           const finalContents = isAuthenticated ? data : data.filter((c: ContentItem) => c.isPublished);
           setContents(finalContents);
           console.log('📝 [Memo] API에서 로드된 콘텐츠:', finalContents.length, '개');
+        } else {
+          console.warn('📝 [Memo] API 로드 실패, Blob에서 시도...');
+          // API 실패 시 Blob에서 로드 시도
+          const blobContents = await loadContentsFromBlob();
+          console.log('📝 [Memo] Blob에서 로드된 전체 콘텐츠:', blobContents.length, '개');
+          
+          const filteredBlobContents = blobContents.filter((c: ContentItem) => c.type === 'memo');
+          console.log('📝 [Memo] 필터링된 memo 콘텐츠:', filteredBlobContents.length, '개');
+          
+          const finalContents = isAuthenticated ? filteredBlobContents : filteredBlobContents.filter((c: ContentItem) => c.isPublished);
+          setContents(finalContents);
+          console.log('📝 [Memo] Blob에서 최종 설정된 콘텐츠:', finalContents.length, '개');
         }
       } catch (err) {
-        // Failed to load contents
+        console.error('📝 [Memo] 콘텐츠 로드 실패:', err);
+        setContents([]);
       } finally {
         setLoading(false);
       }
