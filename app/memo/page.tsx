@@ -102,7 +102,7 @@ export default function MemoPage() {
         ctx.fill();
       });
 
-      // 십자별 그리기 (팅 광선 효과)
+      // 십자별 그리기 (아름다운 금색 광선 효과)
       const currentTime = Date.now();
       crossStars.forEach(cross => {
         const timeSinceLastTing = currentTime - cross.lastTing;
@@ -112,42 +112,57 @@ export default function MemoPage() {
           cross.lastTing = currentTime;
         }
         
-        // 팅 효과 계산 (팅 후 1초간 지속)
-        const tingProgress = Math.min(timeSinceLastTing / 1000, 1);
+        // 팅 효과 계산 (팅 후 1.5초간 지속)
+        const tingProgress = Math.min(timeSinceLastTing / 1500, 1);
         const tingIntensity = shouldTing ? 1 : Math.max(0, 1 - tingProgress);
         
         if (tingIntensity > 0) {
-          // 메인 십자가 (세로, 가로)
-          ctx.strokeStyle = `rgba(255,255,255,${tingIntensity * 0.9})`;
-          ctx.lineWidth = 2;
+          // 메인 십자가 (세로, 가로) - 길게, 흰색
+          ctx.strokeStyle = `rgba(255,255,255,${tingIntensity * 0.8})`;
+          ctx.lineWidth = 2.5;
           ctx.lineCap = 'round';
           
+          const mainCrossSize = cross.size * 1.2; // 십자를 더 길게
           ctx.beginPath();
-          ctx.moveTo(cross.x, cross.y - cross.size);
-          ctx.lineTo(cross.x, cross.y + cross.size);
-          ctx.moveTo(cross.x - cross.size, cross.y);
-          ctx.lineTo(cross.x + cross.size, cross.y);
+          ctx.moveTo(cross.x, cross.y - mainCrossSize);
+          ctx.lineTo(cross.x, cross.y + mainCrossSize);
+          ctx.moveTo(cross.x - mainCrossSize, cross.y);
+          ctx.lineTo(cross.x + mainCrossSize, cross.y);
           ctx.stroke();
           
-          // 8방향 작은 점들 (팅 광선)
-          const dotSize = cross.size * 0.3;
-          const dotPositions = [
-            { x: cross.x + cross.size * 0.7, y: cross.y - cross.size * 0.7 }, // 우상단
-            { x: cross.x + cross.size * 0.7, y: cross.y + cross.size * 0.7 }, // 우하단
-            { x: cross.x - cross.size * 0.7, y: cross.y + cross.size * 0.7 }, // 좌하단
-            { x: cross.x - cross.size * 0.7, y: cross.y - cross.size * 0.7 }, // 좌상단
-            { x: cross.x + cross.size * 0.8, y: cross.y }, // 우측
-            { x: cross.x, y: cross.y + cross.size * 0.8 }, // 하단
-            { x: cross.x - cross.size * 0.8, y: cross.y }, // 좌측
-            { x: cross.x, y: cross.y - cross.size * 0.8 }  // 상단
+          // 8방향 금색 광선 (짧게, 금색)
+          const raySize = cross.size * 0.4; // 십자 사이 빛은 짧게
+          const rayPositions = [
+            { x: cross.x + raySize, y: cross.y - raySize }, // 우상단
+            { x: cross.x + raySize, y: cross.y + raySize }, // 우하단
+            { x: cross.x - raySize, y: cross.y + raySize }, // 좌하단
+            { x: cross.x - raySize, y: cross.y - raySize }, // 좌상단
+            { x: cross.x + raySize * 1.2, y: cross.y }, // 우측
+            { x: cross.x, y: cross.y + raySize * 1.2 }, // 하단
+            { x: cross.x - raySize * 1.2, y: cross.y }, // 좌측
+            { x: cross.x, y: cross.y - raySize * 1.2 }  // 상단
           ];
           
-          dotPositions.forEach((pos, i) => {
-            const dotAlpha = tingIntensity * (0.8 - i * 0.1);
-            ctx.fillStyle = `rgba(255,255,255,${dotAlpha})`;
+          rayPositions.forEach((pos, i) => {
+            const rayAlpha = tingIntensity * (0.9 - i * 0.08);
+            // 금색 그라디언트
+            const gradient = ctx.createRadialGradient(pos.x, pos.y, 0, pos.x, pos.y, raySize * 0.8);
+            gradient.addColorStop(0, `rgba(255,215,0,${rayAlpha})`); // 금색 중심
+            gradient.addColorStop(0.5, `rgba(255,255,100,${rayAlpha * 0.7})`); // 연금색
+            gradient.addColorStop(1, `rgba(255,255,255,${rayAlpha * 0.3})`); // 흰색 외곽
+            
+            ctx.fillStyle = gradient;
             ctx.beginPath();
-            ctx.arc(pos.x, pos.y, dotSize, 0, Math.PI * 2);
+            ctx.arc(pos.x, pos.y, raySize * 0.6, 0, Math.PI * 2);
             ctx.fill();
+            
+            // 금색 글로우 효과
+            ctx.shadowColor = `rgba(255,215,0,${rayAlpha * 0.5})`;
+            ctx.shadowBlur = 8;
+            ctx.beginPath();
+            ctx.arc(pos.x, pos.y, raySize * 0.4, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.shadowBlur = 0;
           });
         }
       });
@@ -218,11 +233,12 @@ export default function MemoPage() {
 
     animate();
 
-    // 🐛 야광충 10마리 생성 (초록빛 강화, 랜덤 움직임)
+    // 🐛 야광충 10마리 생성 (본문에만, 초록빛 강화, 랜덤 움직임)
     for (let i = 0; i < 10; i++) {
       const bug = document.createElement('div');
       bug.className = 'glowbug';
-      bug.style.top = `${Math.random() * 100}%`;
+      // 본문 영역에만 배치 (상단 40vh 이후)
+      bug.style.top = `${40 + Math.random() * 60}%`;
       bug.style.left = `${Math.random() * 100}%`;
       bug.style.setProperty('--t', `${15 + Math.random() * 10}s`);
       document.body.appendChild(bug);
