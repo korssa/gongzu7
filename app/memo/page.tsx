@@ -95,29 +95,29 @@ export default function MemoPage() {
         setLoading(true);
         
         // 먼저 기존 API에서 memo 타입 콘텐츠 로드 시도
-        console.log('📝 [Memo] API에서 memo 콘텐츠 로드 시도...');
+        console.log('📝 [Memo] Loading memo content from API...');
         const res = await fetch(`/api/content?type=memo`);
         
         if (res.ok) {
           const data = await res.json();
           const finalContents = isAuthenticated ? data : data.filter((c: ContentItem) => c.isPublished);
           setContents(finalContents);
-          console.log('📝 [Memo] API에서 로드된 콘텐츠:', finalContents.length, '개');
+          console.log('📝 [Memo] Content loaded from API:', finalContents.length, 'items');
         } else {
-          console.warn('📝 [Memo] API 로드 실패, Blob에서 시도...');
+          console.warn('📝 [Memo] API load failed, trying Blob...');
           // API 실패 시 Blob에서 로드 시도
           const blobContents = await loadContentsFromBlob();
-          console.log('📝 [Memo] Blob에서 로드된 전체 콘텐츠:', blobContents.length, '개');
+          console.log('📝 [Memo] Total content loaded from Blob:', blobContents.length, 'items');
           
           const filteredBlobContents = blobContents.filter((c: ContentItem) => c.type === 'memo');
-          console.log('📝 [Memo] 필터링된 memo 콘텐츠:', filteredBlobContents.length, '개');
+          console.log('📝 [Memo] Filtered memo content:', filteredBlobContents.length, 'items');
           
           const finalContents = isAuthenticated ? filteredBlobContents : filteredBlobContents.filter((c: ContentItem) => c.isPublished);
           setContents(finalContents);
-          console.log('📝 [Memo] Blob에서 최종 설정된 콘텐츠:', finalContents.length, '개');
+          console.log('📝 [Memo] Final content set from Blob:', finalContents.length, 'items');
         }
       } catch (err) {
-        console.error('📝 [Memo] 콘텐츠 로드 실패:', err);
+        console.error('📝 [Memo] Failed to load content:', err);
         setContents([]);
       } finally {
         setLoading(false);
@@ -204,15 +204,15 @@ export default function MemoPage() {
     try {
       // 필수 필드 검증
       if (!formData.title.trim()) {
-        alert('제목을 입력해주세요.');
+        alert('Please enter a title.');
         return;
       }
       if (!formData.author.trim()) {
-        alert('작성자를 입력해주세요.');
+        alert('Please enter an author.');
         return;
       }
       if (!formData.content.trim()) {
-        alert('내용을 입력해주세요.');
+        alert('Please enter content.');
         return;
       }
 
@@ -223,7 +223,7 @@ export default function MemoPage() {
         try {
           imageUrl = await uploadFile(selectedImage, 'content-images');
         } catch {
-          throw new Error('이미지 업로드에 실패했습니다.');
+          throw new Error('Image upload failed.');
         }
       }
 
@@ -255,24 +255,24 @@ export default function MemoPage() {
           // 목록 새로고침 실패
         }
         
-        alert(editingContent ? '메모가 수정되었습니다.' : '메모가 저장되었습니다.');
+        alert(editingContent ? 'Memo has been updated.' : 'Memo has been saved.');
       } else {
-        let message = '메모 저장에 실패했습니다.';
+        let message = 'Failed to save memo.';
         try {
           const err = await response.json();
-          if (err?.error) message = `메모 저장 실패: ${err.error}`;
-          if (err?.details) message += `\n상세: ${err.details}`;
+          if (err?.error) message = `Failed to save memo: ${err.error}`;
+          if (err?.details) message += `\nDetails: ${err.details}`;
         } catch {}
         alert(message);
       }
     } catch {
-      alert('메모 저장에 실패했습니다.');
+      alert('Failed to save memo.');
     }
   };
 
   // 콘텐츠 삭제
   const handleDelete = async (id: string) => {
-    if (!confirm('정말 삭제하시겠습니까?')) return;
+    if (!confirm('Are you sure you want to delete?')) return;
 
     try {
       const response = await fetch(`/api/content?id=${id}`, {
@@ -291,7 +291,7 @@ export default function MemoPage() {
           // 삭제 후 목록 새로고침 실패
         }
         
-        alert('메모가 삭제되었습니다.');
+        alert('Memo has been deleted.');
       }
     } catch {
       // 삭제 실패
@@ -339,7 +339,7 @@ export default function MemoPage() {
     return (
       <div className="min-h-screen bg-black text-white">
         <div className="container mx-auto py-6 max-w-6xl px-4">
-          {/* 상단 네비게이션 */}
+          {/* Top Navigation */}
           <div className="flex items-center justify-between mb-6">
             <Link 
               href="/"
@@ -347,7 +347,7 @@ export default function MemoPage() {
               onMouseEnter={blockTranslationFeedback}
             >
               <Home className="w-4 h-4" />
-              홈으로
+              Home
             </Link>
             <Button 
               onClick={() => {
@@ -359,13 +359,13 @@ export default function MemoPage() {
               onMouseEnter={blockTranslationFeedback}
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
-              ← 목록으로
+              ← Back to List
             </Button>
           </div>
 
           <div className="w-full flex justify-center">
             <div className="w-full max-w-2xl">
-              {/* 헤더 정보 */}
+              {/* Header Info */}
               <div className="text-white border-b border-gray-600 pb-4 mb-6" onMouseEnter={blockTranslationFeedback}>
                 <h1 className="text-3xl font-bold mb-2" translate="no">{selected.title}</h1>
                 <div className="flex gap-4 text-sm text-gray-400">
@@ -379,9 +379,9 @@ export default function MemoPage() {
                 </div>
               </div>
 
-              {/* 본문 콘텐츠 */}
+              {/* Main Content */}
               <article className="text-left text-gray-300 leading-relaxed space-y-6" onMouseEnter={blockTranslationFeedback}>
-                {/* 이미지가 있으면 본문 시작 부분에 배치 */}
+                {/* Place image at the beginning of content if available */}
                 {selected.imageUrl && (
                   <div className="flex justify-start mb-6">
                     <img
@@ -393,7 +393,7 @@ export default function MemoPage() {
                   </div>
                 )}
 
-                {/* 본문 텍스트 */}
+                {/* Main Text */}
                 <pre
                   className="whitespace-pre-wrap font-mono preserve-format"
                   style={{
@@ -407,7 +407,7 @@ export default function MemoPage() {
                 </pre>
               </article>
 
-              {/* 태그 */}
+              {/* Tags */}
               {selected.tags && selected.tags.length > 0 && (
                 <div className="flex gap-2 flex-wrap mt-6 pt-4 border-t border-gray-600" onMouseEnter={blockTranslationFeedback}>
                   {selected.tags.map((tag, index) => (
@@ -434,7 +434,7 @@ export default function MemoPage() {
         <div className="container mx-auto py-6 max-w-6xl px-4">
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-400 mx-auto"></div>
-            <p className="text-gray-400 mt-4">메모를 불러오는 중...</p>
+            <p className="text-gray-400 mt-4">Loading memos...</p>
           </div>
         </div>
       </div>
@@ -446,7 +446,7 @@ export default function MemoPage() {
     return (
       <div className="min-h-screen bg-black text-white">
         <div className="container mx-auto py-6 max-w-6xl px-4">
-          {/* 상단 네비게이션 */}
+          {/* Top Navigation */}
           <div className="flex items-center justify-between mb-6">
             <Link 
               href="/"
@@ -454,82 +454,82 @@ export default function MemoPage() {
               onMouseEnter={blockTranslationFeedback}
             >
               <Home className="w-4 h-4" />
-              홈으로
+              Home
             </Link>
           </div>
 
           <div className="text-center py-12">
-            <h3 className="text-xl font-semibold text-gray-300 mb-2">메모가 없습니다</h3>
-            <p className="text-gray-400 mb-6">곧 새로운 메모가 추가될 예정입니다.</p>
+            <h3 className="text-xl font-semibold text-gray-300 mb-2">No memos yet</h3>
+            <p className="text-gray-400 mb-6">New memos will be added soon.</p>
             
-            {/* 관리자 모드에서만 추가 버튼 표시 */}
+            {/* Show add button only in admin mode */}
           {isAuthenticated && (
             <div className="mt-6">
               <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger asChild>
                   <Button onClick={() => { resetForm(); setIsDialogOpen(true); }} className="gap-2">
                     <Plus className="h-4 w-4" />
-                    새 메모 작성
+                    Create New Memo
                   </Button>
                 </DialogTrigger>
                   <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
                     <DialogHeader>
                       <DialogTitle>
-                        {editingContent ? '메모 수정' : '새 메모 작성'}
+                        {editingContent ? 'Edit Memo' : 'Create New Memo'}
                       </DialogTitle>
                       <DialogDescription>
-                        새로운 메모를 작성하세요.
+                        Create a new memo.
                       </DialogDescription>
                     </DialogHeader>
                     
                     <div className="space-y-4">
                       <div>
-                        <label htmlFor="memo-title" className="block text-sm font-medium mb-2">제목 *</label>
+                        <label htmlFor="memo-title" className="block text-sm font-medium mb-2">Title *</label>
                         <Input
                           id="memo-title"
                           name="title"
                           value={formData.title}
                           onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-                          placeholder="제목을 입력하세요"
+                          placeholder="Enter title"
                         />
                       </div>
 
                       <div>
-                        <label htmlFor="memo-author" className="block text-sm font-medium mb-2">작성자 *</label>
+                        <label htmlFor="memo-author" className="block text-sm font-medium mb-2">Author *</label>
                         <Input
                           id="memo-author"
                           name="author"
                           value={formData.author}
                           onChange={(e) => setFormData(prev => ({ ...prev, author: e.target.value }))}
-                          placeholder="작성자명을 입력하세요"
+                          placeholder="Enter author name"
                         />
                       </div>
 
                       <div>
-                        <label htmlFor="memo-content" className="block text-sm font-medium mb-2">내용 *</label>
+                        <label htmlFor="memo-content" className="block text-sm font-medium mb-2">Content *</label>
                         <Textarea
                           id="memo-content"
                           name="content"
                           value={formData.content}
                           onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
-                          placeholder="내용을 입력하세요"
+                          placeholder="Enter content"
                           rows={10}
                         />
                       </div>
 
                       <div>
-                        <label htmlFor="memo-tags" className="block text-sm font-medium mb-2">태그</label>
+                        <label htmlFor="memo-tags" className="block text-sm font-medium mb-2">Tags</label>
                         <Input
                           id="memo-tags"
                           name="tags"
                           value={formData.tags}
                           onChange={(e) => setFormData(prev => ({ ...prev, tags: e.target.value }))}
-                          placeholder="태그를 쉼표로 구분하여 입력하세요"
+                          placeholder="Enter tags separated by commas"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium mb-2">대표 이미지 (선택사항)</label>
+                        <label className="block text-sm font-medium mb-2">Featured Image (Optional)</label>
                         <div className="space-y-2">
                           <input
                             id="image-upload"
@@ -544,7 +544,7 @@ export default function MemoPage() {
                               onClick={() => document.getElementById('image-upload')?.click()}
                               className="px-3 py-2 text-sm bg-gray-800 border border-gray-600 text-gray-300 hover:border-amber-400 rounded transition-colors"
                             >
-                              이미지 선택
+                              Select Image
                             </button>
                             {selectedImage && (
                               <button
@@ -552,7 +552,7 @@ export default function MemoPage() {
                                 onClick={handleRemoveImage}
                                 className="px-3 py-2 text-sm bg-red-600 border border-red-600 text-white hover:bg-red-700 rounded transition-colors"
                               >
-                                제거
+                                Remove
                               </button>
                             )}
                           </div>
@@ -560,7 +560,7 @@ export default function MemoPage() {
                             <div className="mt-2">
                               <img
                                 src={imagePreview}
-                                alt="미리보기"
+                                alt="Preview"
                                 className="w-32 h-32 object-cover rounded border"
                               />
                             </div>
@@ -576,17 +576,17 @@ export default function MemoPage() {
                           onChange={(e) => setFormData(prev => ({ ...prev, isPublished: e.target.checked }))}
                         />
                         <label htmlFor="isPublished" className="text-sm">
-                          즉시 게시
+                          Publish immediately
                         </label>
                       </div>
                     </div>
 
                     <DialogFooter>
                       <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
-                        취소
+                        Cancel
                       </Button>
                       <Button onClick={handleSubmit}>
-                        {editingContent ? '수정' : '저장'}
+                        {editingContent ? 'Update' : 'Save'}
                       </Button>
                     </DialogFooter>
                   </DialogContent>
@@ -603,7 +603,7 @@ export default function MemoPage() {
   return (
     <div className="min-h-screen bg-black text-white">
       <div className="container mx-auto py-6 max-w-6xl px-4">
-        {/* 상단 네비게이션 */}
+        {/* Top Navigation */}
         <div className="flex items-center justify-between mb-6">
           <Link 
             href="/"
@@ -611,76 +611,76 @@ export default function MemoPage() {
             onMouseEnter={blockTranslationFeedback}
           >
             <Home className="w-4 h-4" />
-            홈으로
+            Home
           </Link>
         </div>
 
         <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-white mb-2" onMouseEnter={blockTranslationFeedback}>메모장</h2>
-          <p className="text-gray-400">자유롭게 메모를 작성하고 관리하세요</p>
+          <h2 className="text-3xl font-bold text-white mb-2" onMouseEnter={blockTranslationFeedback}>GPTXGONGMYUNG.COM</h2>
+          <p className="text-gray-400">Our 🌿Slogan - "We're just. that kind of group!"</p>
         {isAuthenticated && (
           <div className="mt-4">
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
                 <Button onClick={() => { resetForm(); setIsDialogOpen(true); }} className="gap-2">
                   <Plus className="h-4 w-4" />
-                  새 메모 작성
+                  Create New Memo
                 </Button>
               </DialogTrigger>
                 <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
                   <DialogHeader>
                     <DialogTitle>
-                      {editingContent ? '메모 수정' : '새 메모 작성'}
+                      {editingContent ? 'Edit Memo' : 'Create New Memo'}
                     </DialogTitle>
                     <DialogDescription>
-                      새로운 메모를 작성하세요.
+                      Create a new memo.
                     </DialogDescription>
                   </DialogHeader>
                   
                   <div className="space-y-4">
                     <div>
-                      <label htmlFor="memo-title-list" className="block text-sm font-medium mb-2">제목 *</label>
+                      <label htmlFor="memo-title-list" className="block text-sm font-medium mb-2">Title *</label>
                       <Input
                         id="memo-title-list"
                         value={formData.title}
                         onChange={(e) => setFormData(prev => ({ ...prev, title: e.target.value }))}
-                        placeholder="제목을 입력하세요"
+                        placeholder="Enter title"
                       />
                     </div>
 
                     <div>
-                      <label htmlFor="memo-author-list" className="block text-sm font-medium mb-2">작성자 *</label>
+                      <label htmlFor="memo-author-list" className="block text-sm font-medium mb-2">Author *</label>
                       <Input
                         id="memo-author-list"
                         value={formData.author}
                         onChange={(e) => setFormData(prev => ({ ...prev, author: e.target.value }))}
-                        placeholder="작성자명을 입력하세요"
+                        placeholder="Enter author name"
                       />
                     </div>
 
                     <div>
-                      <label htmlFor="memo-content-list" className="block text-sm font-medium mb-2">내용 *</label>
+                      <label htmlFor="memo-content-list" className="block text-sm font-medium mb-2">Content *</label>
                       <Textarea
                         id="memo-content-list"
                         value={formData.content}
                         onChange={(e) => setFormData(prev => ({ ...prev, content: e.target.value }))}
-                        placeholder="내용을 입력하세요"
+                        placeholder="Enter content"
                         rows={10}
                       />
                     </div>
 
                     <div>
-                      <label htmlFor="memo-tags-list" className="block text-sm font-medium mb-2">태그</label>
+                      <label htmlFor="memo-tags-list" className="block text-sm font-medium mb-2">Tags</label>
                       <Input
                         id="memo-tags-list"
                         value={formData.tags}
                         onChange={(e) => setFormData(prev => ({ ...prev, tags: e.target.value }))}
-                        placeholder="태그를 쉼표로 구분하여 입력하세요"
+                        placeholder="Enter tags separated by commas"
                       />
                     </div>
 
                     <div>
-                      <label htmlFor="memo-image-list" className="block text-sm font-medium mb-2">대표 이미지 (선택사항)</label>
+                      <label htmlFor="memo-image-list" className="block text-sm font-medium mb-2">Featured Image (Optional)</label>
                       <div className="space-y-2">
                         <input
                           id="image-upload-list"
@@ -695,7 +695,7 @@ export default function MemoPage() {
                             onClick={() => document.getElementById('image-upload-list')?.click()}
                             className="px-3 py-2 text-sm bg-gray-800 border border-gray-600 text-gray-300 hover:border-amber-400 rounded transition-colors"
                           >
-                            이미지 선택
+                            Select Image
                           </button>
                           {selectedImage && (
                             <button
@@ -703,7 +703,7 @@ export default function MemoPage() {
                               onClick={handleRemoveImage}
                               className="px-3 py-2 text-sm bg-red-600 border border-red-600 text-white hover:bg-red-700 rounded transition-colors"
                             >
-                              제거
+                                Remove
                             </button>
                           )}
                         </div>
@@ -711,7 +711,7 @@ export default function MemoPage() {
                           <div className="mt-2">
                             <img
                               src={imagePreview}
-                              alt="미리보기"
+                              alt="Preview"
                               className="w-32 h-32 object-cover rounded border"
                             />
                           </div>
@@ -727,17 +727,17 @@ export default function MemoPage() {
                         onChange={(e) => setFormData(prev => ({ ...prev, isPublished: e.target.checked }))}
                       />
                       <label htmlFor="isPublished" className="text-sm">
-                        즉시 게시
+                        Publish immediately
                       </label>
                     </div>
                   </div>
 
                   <DialogFooter>
                     <Button variant="outline" onClick={() => setIsDialogOpen(false)}>
-                      취소
+                      Cancel
                     </Button>
                     <Button onClick={handleSubmit}>
-                      {editingContent ? '수정' : '저장'}
+                      {editingContent ? 'Update' : 'Save'}
                     </Button>
                   </DialogFooter>
                 </DialogContent>
