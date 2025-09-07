@@ -27,6 +27,7 @@ import { blockTranslationFeedback, createAdminButtonHandler } from "@/lib/transl
 import { loadContentsFromBlob } from "@/lib/data-loader";
 import { loadMemoDraft, saveMemoDraft, clearMemoDraft } from "@/lib/memo-storage";
 import Link from "next/link";
+import SoftGlowStar from "@/components/soft-glow-star";
 
 export default function MemoPage() {
   const [contents, setContents] = useState<ContentItem[]>([]);
@@ -702,6 +703,7 @@ export default function MemoPage() {
 
         <canvas id="skyCanvas"></canvas>
         <div className="moon"></div>
+        <SoftGlowStar />
         
         <div className="container mx-auto py-6 max-w-6xl px-4 relative z-10">
           <div className="text-center py-12">
