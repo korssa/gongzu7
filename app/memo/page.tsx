@@ -692,7 +692,7 @@ export default function MemoPage() {
                         <div className="flex gap-2">
                           <button
                             type="button"
-                            onClick={() => document.getElementById('image-upload')?.click()}
+                            onClick={() => document.getElementById('image-upload-list')?.click()}
                             className="px-3 py-2 text-sm bg-gray-800 border border-gray-600 text-gray-300 hover:border-amber-400 rounded transition-colors"
                           >
                             이미지 선택
