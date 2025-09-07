@@ -617,7 +617,7 @@ export default function MemoPage() {
 
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold text-white mb-2" onMouseEnter={blockTranslationFeedback}>GPTXGONGMYUNG.COM</h2>
-          <p className="text-gray-400">Our 🌿Slogan - "We're just. that kind of group!"</p>
+          <p className="text-gray-400">Our 🌿Slogan - &quot;We&apos;re just. that kind of group!&quot;</p>
         {isAuthenticated && (
           <div className="mt-4">
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
