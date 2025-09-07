@@ -284,7 +284,7 @@ export function GalleryManager({
             </Card>
           </div>
         ) : (
-          items.map((item) => (
+          items.map((item, index) => (
             <Card
               key={item.id}
               className="group overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-1"
@@ -313,6 +313,15 @@ export function GalleryManager({
                     {item.type}
                   </Badge>
                 </div>
+
+                {/* Event Number Badge - Events 타입일 때만 표시 */}
+                {type === 'events' && (
+                  <div className="absolute top-2 left-2">
+                    <Badge className="bg-purple-600 text-white text-lg font-bold w-8 h-8 flex items-center justify-center">
+                      {index + 1}
+                    </Badge>
+                  </div>
+                )}
 
                 {/* Delete Button - Admin Only */}
                 {isAdmin && (

@@ -1067,12 +1067,28 @@ export default function Home() {
                        )}
                        
                        {currentFilter === "events" && (
-                         <GalleryManager
-                           type="events"
-                           title="Events"
-                           description="Stay updated with the latest app events and special offers"
-                           isAdmin={isAdmin}
-                         />
+                         <>
+                           <GalleryManager
+                             type="events"
+                             title="Events"
+                             description="Stay updated with the latest app events and special offers"
+                             isAdmin={isAdmin}
+                           />
+                           
+                           {/* Events 모드일 때 설명문구와 메일폼 추가 */}
+                           <div className="mt-12 text-center">
+                             <div className="max-w-2xl mx-auto">
+                               <div className="max-w-md mx-auto">
+                                 <MailForm
+                                   type="events"
+                                   buttonText="🎉 Events 📧 Touch Here 🎉"
+                                   buttonDescription="Choose one of the apps above as your free gift. The gift will be delivered to your email. By accepting, you agree to receive occasional news and offers from us via that email address."
+                                   onMouseEnter={handleFooterHover}
+                                 />
+                               </div>
+                             </div>
+                           </div>
+                         </>
                        )}
 
                        {/* 일반 갤러리 - New Release 모드에서는 숨김 */}
