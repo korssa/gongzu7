@@ -545,16 +545,7 @@ export default function MemoPage() {
             z-index: 1;
           }
           
-          /* 🌕 달 (좌측) */
-          .moon {
-            position: fixed; top: 6vh; left: 4vw;
-            width: 64px; height: 64px; border-radius: 50%;
-            background: radial-gradient(circle at 40% 40%, #fff 0%, #dcdcdc 45%, #bfbfbf 70%, rgba(0,0,0,0) 100%);
-            box-shadow: 0 0 24px rgba(255,255,255,0.35);
-            animation: moonFloat 12s ease-in-out infinite;
-            z-index: 2;
-          }
-          @keyframes moonFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }
+          /* 달 제거됨 */
 
           /* 야광충 삭제됨 - 십자별의 진짜 별 반짝임 효과로 대체 */
 
@@ -570,7 +561,6 @@ export default function MemoPage() {
         `}} />
 
         <canvas id="skyCanvas"></canvas>
-        <div className="moon"></div>
         
         <div className="container mx-auto py-6 max-w-6xl px-4 relative z-10">
           {/* Top Navigation */}
@@ -677,16 +667,7 @@ export default function MemoPage() {
             z-index: 1;
           }
           
-          /* 🌕 달 (좌측) */
-          .moon {
-            position: fixed; top: 6vh; left: 4vw;
-            width: 64px; height: 64px; border-radius: 50%;
-            background: radial-gradient(circle at 40% 40%, #fff 0%, #dcdcdc 45%, #bfbfbf 70%, rgba(0,0,0,0) 100%);
-            box-shadow: 0 0 24px rgba(255,255,255,0.35);
-            animation: moonFloat 12s ease-in-out infinite;
-            z-index: 2;
-          }
-          @keyframes moonFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }
+          /* 달 제거됨 */
 
           /* 야광충 삭제됨 - 십자별의 진짜 별 반짝임 효과로 대체 */
 
@@ -730,16 +711,7 @@ export default function MemoPage() {
             z-index: 1;
           }
           
-          /* 🌕 달 (좌측) */
-          .moon {
-            position: fixed; top: 6vh; left: 4vw;
-            width: 64px; height: 64px; border-radius: 50%;
-            background: radial-gradient(circle at 40% 40%, #fff 0%, #dcdcdc 45%, #bfbfbf 70%, rgba(0,0,0,0) 100%);
-            box-shadow: 0 0 24px rgba(255,255,255,0.35);
-            animation: moonFloat 12s ease-in-out infinite;
-            z-index: 2;
-          }
-          @keyframes moonFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }
+          /* 달 제거됨 */
 
           /* 야광충 삭제됨 - 십자별의 진짜 별 반짝임 효과로 대체 */
 
@@ -755,7 +727,6 @@ export default function MemoPage() {
         `}} />
 
         <canvas id="skyCanvas"></canvas>
-        <div className="moon"></div>
         
         <div className="container mx-auto py-6 max-w-6xl px-4 relative z-10">
           {/* Top Navigation */}
@@ -926,16 +897,7 @@ export default function MemoPage() {
             z-index: 1;
           }
           
-          /* 🌕 달 (좌측) */
-          .moon {
-            position: fixed; top: 6vh; left: 4vw;
-            width: 64px; height: 64px; border-radius: 50%;
-            background: radial-gradient(circle at 40% 40%, #fff 0%, #dcdcdc 45%, #bfbfbf 70%, rgba(0,0,0,0) 100%);
-            box-shadow: 0 0 24px rgba(255,255,255,0.35);
-            animation: moonFloat 12s ease-in-out infinite;
-            z-index: 2;
-          }
-          @keyframes moonFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }
+          /* 달 제거됨 */
 
           /* 야광충 삭제됨 - 십자별의 진짜 별 반짝임 효과로 대체 */
 
@@ -969,8 +931,9 @@ export default function MemoPage() {
 
         {/* 슬로건 위치 - 밤하늘 애니메이션과 함께 */}
         <div className="text-center mb-8 relative z-10" style={{ padding: '3rem 1rem' }}>
-          <h2 className="text-3xl font-bold text-white mb-2" onMouseEnter={blockTranslationFeedback} style={{ textShadow: '0 0 6px rgba(0,0,0,0.6)' }}>GPTXGONGMYUNG.COM</h2>
-          <p className="text-gray-400" style={{ textShadow: '0 0 6px rgba(0,0,0,0.6)' }}>Our 🌿Slogan - &quot;We&apos;re just. that kind of group!&quot;</p>
+          <h2 className="text-2xl font-bold text-white mb-2" onMouseEnter={blockTranslationFeedback} style={{ textShadow: '0 0 6px rgba(0,0,0,0.6)' }}>GPTXGONGMYUNG.COM</h2>
+          <p className="text-gray-400" style={{ textShadow: '0 0 6px rgba(0,0,0,0.6)' }}>Our 🌿Slogan</p>
+          <p className="text-gray-400" style={{ textShadow: '0 0 6px rgba(0,0,0,0.6)' }}>&quot;We&apos;re just. That kind of group!&quot;</p>
         {isAuthenticated && (
           <div className="mt-4">
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
