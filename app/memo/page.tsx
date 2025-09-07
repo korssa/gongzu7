@@ -47,6 +47,56 @@ export default function MemoPage() {
 
   const { isAuthenticated } = useAdmin();
 
+  // 🌌 밤하늘 애니메이션 요소 생성
+  useEffect(() => {
+    // 🌕 달 생성
+    const moon = document.createElement('div');
+    moon.className = 'moon';
+    document.body.appendChild(moon);
+
+    // ☄️ 유성 생성 (오른쪽) - 8초 후
+    setTimeout(() => {
+      const meteor = document.createElement('div');
+      meteor.className = 'meteor';
+      document.body.appendChild(meteor);
+      setTimeout(() => meteor.remove(), 3000);
+    }, 8000);
+
+    // ✴️ 십자별 7개 생성
+    const stars = [
+      { top: '10%', left: '30%' },
+      { top: '18%', left: '70%' },
+      { top: '25%', left: '50%' },
+      { top: '12%', left: '80%' },
+      { top: '20%', left: '20%' },
+      { top: '15%', left: '60%' },
+      { top: '22%', left: '40%' }
+    ];
+    stars.forEach(pos => {
+      const star = document.createElement('div');
+      star.className = 'cross-star';
+      star.style.top = pos.top;
+      star.style.left = pos.left;
+      document.body.appendChild(star);
+    });
+
+    // 🐛 야광충 20마리 생성
+    for (let i = 0; i < 20; i++) {
+      const bug = document.createElement('div');
+      bug.className = 'glowbug';
+      bug.style.top = `${60 + Math.random() * 30}%`;
+      bug.style.left = `${Math.random() * 100}%`;
+      bug.style.animationDuration = `${10 + Math.random() * 10}s`;
+      document.body.appendChild(bug);
+    }
+
+    // 컴포넌트 언마운트 시 정리
+    return () => {
+      // 모든 애니메이션 요소 제거
+      document.querySelectorAll('.moon, .meteor, .cross-star, .glowbug').forEach(el => el.remove());
+    };
+  }, []);
+
   // 위젯 토글 시 메모 저장 브로드캐스트 수신
   useEffect(() => {
     const handler = () => {
@@ -337,8 +387,111 @@ export default function MemoPage() {
   // If content selected, show detail view
   if (selected) {
     return (
-      <div className="min-h-screen bg-black text-white">
-        <div className="container mx-auto py-6 max-w-6xl px-4">
+      <div className="min-h-screen bg-black text-white relative">
+        {/* 🌌 GPTXGONGMYUNG MEMO - Night Sky Animation */}
+        <style dangerouslySetInnerHTML={{
+          __html: `
+          /* 🌟 별 배경 */
+          body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 40vh;
+            background: 
+              radial-gradient(circle at 20% 30%, rgba(255,255,255,0.08), transparent 50%),
+              radial-gradient(circle at 80% 40%, rgba(255,255,255,0.06), transparent 60%),
+              radial-gradient(circle at 10% 10%, rgba(255,255,255,0.07), transparent 55%),
+              radial-gradient(circle at 30% 70%, rgba(255,255,255,0.05), transparent 50%),
+              radial-gradient(circle at 60% 20%, rgba(200,255,255,0.05), transparent 55%),
+              radial-gradient(circle at 50% 50%, rgba(255,255,255,0.08), transparent 50%),
+              radial-gradient(circle at 70% 80%, rgba(255,255,255,0.05), transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+          }
+
+          /* 🌕 달 */
+          .moon {
+            position: fixed;
+            top: 6vh;
+            left: 4vw;
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, #fff, #ccc 40%, #aaa 70%, transparent 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(255,255,255,0.3);
+            opacity: 0.85;
+            animation: moonFloat 12s ease-in-out infinite;
+            z-index: 2;
+          }
+
+          @keyframes moonFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(8px); }
+          }
+
+          /* ☄️ 유성 (오른쪽) */
+          .meteor {
+            position: fixed;
+            top: -10px;
+            left: 90vw;
+            width: 2px;
+            height: 80px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.8), transparent);
+            opacity: 0.8;
+            transform: rotate(-45deg);
+            animation: meteorMove 3s linear forwards;
+            z-index: 1;
+          }
+
+          @keyframes meteorMove {
+            0% { transform: translate(0, 0) rotate(-45deg); opacity: 1; }
+            100% { transform: translate(-120vw, 80vh) rotate(-45deg); opacity: 0; }
+          }
+
+          /* ✴️ 십자별 */
+          .cross-star {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: transparent;
+            box-shadow:
+              0 -10px 5px rgba(255,255,255,0.5),
+              0 10px 5px rgba(255,255,255,0.5),
+              -10px 0 5px rgba(255,255,255,0.5),
+              10px 0 5px rgba(255,255,255,0.5);
+            border-radius: 50%;
+            animation: starTwinkle 2s infinite ease-in-out;
+            z-index: 2;
+          }
+
+          @keyframes starTwinkle {
+            0%, 100% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(0.7); }
+          }
+
+          /* 🐛 야광충 */
+          .glowbug {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, rgba(200,255,180,0.8) 0%, transparent 70%);
+            filter: blur(2px);
+            animation: glowDrift 16s infinite ease-in-out;
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: 5;
+          }
+
+          @keyframes glowDrift {
+            0% { transform: translate(0, 0); }
+            50% { transform: translate(60px, -40px); }
+            100% { transform: translate(0, 0); }
+          }
+        `}} />
+        
+        <div className="container mx-auto py-6 max-w-6xl px-4 relative z-10">
           {/* Top Navigation */}
           <div className="flex items-center justify-between mb-6">
             <Link 
@@ -410,9 +563,9 @@ export default function MemoPage() {
               {/* Tags */}
               {selected.tags && selected.tags.length > 0 && (
                 <div className="flex gap-2 flex-wrap mt-6 pt-4 border-t border-gray-600" onMouseEnter={blockTranslationFeedback}>
-                  {selected.tags.map((tag, index) => (
+                  {selected.tags.map((tag) => (
                     <span
-                      key={index}
+                      key={tag}
                       className="px-3 py-1 bg-white text-black rounded-full text-sm"
                     >
                       #{tag}
@@ -430,8 +583,111 @@ export default function MemoPage() {
   // Loading state
   if (loading) {
     return (
-      <div className="min-h-screen bg-black text-white">
-        <div className="container mx-auto py-6 max-w-6xl px-4">
+      <div className="min-h-screen bg-black text-white relative">
+        {/* 🌌 GPTXGONGMYUNG MEMO - Night Sky Animation */}
+        <style dangerouslySetInnerHTML={{
+          __html: `
+          /* 🌟 별 배경 */
+          body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 40vh;
+            background: 
+              radial-gradient(circle at 20% 30%, rgba(255,255,255,0.08), transparent 50%),
+              radial-gradient(circle at 80% 40%, rgba(255,255,255,0.06), transparent 60%),
+              radial-gradient(circle at 10% 10%, rgba(255,255,255,0.07), transparent 55%),
+              radial-gradient(circle at 30% 70%, rgba(255,255,255,0.05), transparent 50%),
+              radial-gradient(circle at 60% 20%, rgba(200,255,255,0.05), transparent 55%),
+              radial-gradient(circle at 50% 50%, rgba(255,255,255,0.08), transparent 50%),
+              radial-gradient(circle at 70% 80%, rgba(255,255,255,0.05), transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+          }
+
+          /* 🌕 달 */
+          .moon {
+            position: fixed;
+            top: 6vh;
+            left: 4vw;
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, #fff, #ccc 40%, #aaa 70%, transparent 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(255,255,255,0.3);
+            opacity: 0.85;
+            animation: moonFloat 12s ease-in-out infinite;
+            z-index: 2;
+          }
+
+          @keyframes moonFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(8px); }
+          }
+
+          /* ☄️ 유성 (오른쪽) */
+          .meteor {
+            position: fixed;
+            top: -10px;
+            left: 90vw;
+            width: 2px;
+            height: 80px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.8), transparent);
+            opacity: 0.8;
+            transform: rotate(-45deg);
+            animation: meteorMove 3s linear forwards;
+            z-index: 1;
+          }
+
+          @keyframes meteorMove {
+            0% { transform: translate(0, 0) rotate(-45deg); opacity: 1; }
+            100% { transform: translate(-120vw, 80vh) rotate(-45deg); opacity: 0; }
+          }
+
+          /* ✴️ 십자별 */
+          .cross-star {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: transparent;
+            box-shadow:
+              0 -10px 5px rgba(255,255,255,0.5),
+              0 10px 5px rgba(255,255,255,0.5),
+              -10px 0 5px rgba(255,255,255,0.5),
+              10px 0 5px rgba(255,255,255,0.5);
+            border-radius: 50%;
+            animation: starTwinkle 2s infinite ease-in-out;
+            z-index: 2;
+          }
+
+          @keyframes starTwinkle {
+            0%, 100% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(0.7); }
+          }
+
+          /* 🐛 야광충 */
+          .glowbug {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, rgba(200,255,180,0.8) 0%, transparent 70%);
+            filter: blur(2px);
+            animation: glowDrift 16s infinite ease-in-out;
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: 5;
+          }
+
+          @keyframes glowDrift {
+            0% { transform: translate(0, 0); }
+            50% { transform: translate(60px, -40px); }
+            100% { transform: translate(0, 0); }
+          }
+        `}} />
+        
+        <div className="container mx-auto py-6 max-w-6xl px-4 relative z-10">
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-400 mx-auto"></div>
             <p className="text-gray-400 mt-4">Loading memos...</p>
@@ -444,8 +700,111 @@ export default function MemoPage() {
   // Empty state
   if (contents.length === 0) {
     return (
-      <div className="min-h-screen bg-black text-white">
-        <div className="container mx-auto py-6 max-w-6xl px-4">
+      <div className="min-h-screen bg-black text-white relative">
+        {/* 🌌 GPTXGONGMYUNG MEMO - Night Sky Animation */}
+        <style dangerouslySetInnerHTML={{
+          __html: `
+          /* 🌟 별 배경 */
+          body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 40vh;
+            background: 
+              radial-gradient(circle at 20% 30%, rgba(255,255,255,0.08), transparent 50%),
+              radial-gradient(circle at 80% 40%, rgba(255,255,255,0.06), transparent 60%),
+              radial-gradient(circle at 10% 10%, rgba(255,255,255,0.07), transparent 55%),
+              radial-gradient(circle at 30% 70%, rgba(255,255,255,0.05), transparent 50%),
+              radial-gradient(circle at 60% 20%, rgba(200,255,255,0.05), transparent 55%),
+              radial-gradient(circle at 50% 50%, rgba(255,255,255,0.08), transparent 50%),
+              radial-gradient(circle at 70% 80%, rgba(255,255,255,0.05), transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+          }
+
+          /* 🌕 달 */
+          .moon {
+            position: fixed;
+            top: 6vh;
+            left: 4vw;
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, #fff, #ccc 40%, #aaa 70%, transparent 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(255,255,255,0.3);
+            opacity: 0.85;
+            animation: moonFloat 12s ease-in-out infinite;
+            z-index: 2;
+          }
+
+          @keyframes moonFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(8px); }
+          }
+
+          /* ☄️ 유성 (오른쪽) */
+          .meteor {
+            position: fixed;
+            top: -10px;
+            left: 90vw;
+            width: 2px;
+            height: 80px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.8), transparent);
+            opacity: 0.8;
+            transform: rotate(-45deg);
+            animation: meteorMove 3s linear forwards;
+            z-index: 1;
+          }
+
+          @keyframes meteorMove {
+            0% { transform: translate(0, 0) rotate(-45deg); opacity: 1; }
+            100% { transform: translate(-120vw, 80vh) rotate(-45deg); opacity: 0; }
+          }
+
+          /* ✴️ 십자별 */
+          .cross-star {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: transparent;
+            box-shadow:
+              0 -10px 5px rgba(255,255,255,0.5),
+              0 10px 5px rgba(255,255,255,0.5),
+              -10px 0 5px rgba(255,255,255,0.5),
+              10px 0 5px rgba(255,255,255,0.5);
+            border-radius: 50%;
+            animation: starTwinkle 2s infinite ease-in-out;
+            z-index: 2;
+          }
+
+          @keyframes starTwinkle {
+            0%, 100% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(0.7); }
+          }
+
+          /* 🐛 야광충 */
+          .glowbug {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, rgba(200,255,180,0.8) 0%, transparent 70%);
+            filter: blur(2px);
+            animation: glowDrift 16s infinite ease-in-out;
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: 5;
+          }
+
+          @keyframes glowDrift {
+            0% { transform: translate(0, 0); }
+            50% { transform: translate(60px, -40px); }
+            100% { transform: translate(0, 0); }
+          }
+        `}} />
+        
+        <div className="container mx-auto py-6 max-w-6xl px-4 relative z-10">
           {/* Top Navigation */}
           <div className="flex items-center justify-between mb-6">
             <Link 
@@ -601,8 +960,112 @@ export default function MemoPage() {
 
   // List view
   return (
-    <div className="min-h-screen bg-black text-white">
-      <div className="container mx-auto py-6 max-w-6xl px-4">
+    <div className="min-h-screen bg-black text-white relative">
+      {/* 🌌 GPTXGONGMYUNG MEMO - Night Sky Animation */}
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          /* 🌟 별 배경 */
+          body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 40vh;
+            background: 
+              radial-gradient(circle at 20% 30%, rgba(255,255,255,0.08), transparent 50%),
+              radial-gradient(circle at 80% 40%, rgba(255,255,255,0.06), transparent 60%),
+              radial-gradient(circle at 10% 10%, rgba(255,255,255,0.07), transparent 55%),
+              radial-gradient(circle at 30% 70%, rgba(255,255,255,0.05), transparent 50%),
+              radial-gradient(circle at 60% 20%, rgba(200,255,255,0.05), transparent 55%),
+              radial-gradient(circle at 50% 50%, rgba(255,255,255,0.08), transparent 50%),
+              radial-gradient(circle at 70% 80%, rgba(255,255,255,0.05), transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+          }
+
+          /* 🌕 달 */
+          .moon {
+            position: fixed;
+            top: 6vh;
+            left: 4vw;
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, #fff, #ccc 40%, #aaa 70%, transparent 100%);
+            border-radius: 50%;
+            box-shadow: 0 0 20px rgba(255,255,255,0.3);
+            opacity: 0.85;
+            animation: moonFloat 12s ease-in-out infinite;
+            z-index: 2;
+          }
+
+          @keyframes moonFloat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(8px); }
+          }
+
+          /* ☄️ 유성 (오른쪽) */
+          .meteor {
+            position: fixed;
+            top: -10px;
+            left: 90vw;
+            width: 2px;
+            height: 80px;
+            background: linear-gradient(to bottom, rgba(255,255,255,0.8), transparent);
+            opacity: 0.8;
+            transform: rotate(-45deg);
+            animation: meteorMove 3s linear forwards;
+            z-index: 1;
+          }
+
+          @keyframes meteorMove {
+            0% { transform: translate(0, 0) rotate(-45deg); opacity: 1; }
+            100% { transform: translate(-120vw, 80vh) rotate(-45deg); opacity: 0; }
+          }
+
+          /* ✴️ 십자별 */
+          .cross-star {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: transparent;
+            box-shadow:
+              0 -10px 5px rgba(255,255,255,0.5),
+              0 10px 5px rgba(255,255,255,0.5),
+              -10px 0 5px rgba(255,255,255,0.5),
+              10px 0 5px rgba(255,255,255,0.5);
+            border-radius: 50%;
+            animation: starTwinkle 2s infinite ease-in-out;
+            z-index: 2;
+          }
+
+          @keyframes starTwinkle {
+            0%, 100% { opacity: 0.8; transform: scale(1); }
+            50% { opacity: 0.3; transform: scale(0.7); }
+          }
+
+          /* 🐛 야광충 */
+          .glowbug {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, rgba(200,255,180,0.8) 0%, transparent 70%);
+            filter: blur(2px);
+            animation: glowDrift 16s infinite ease-in-out;
+            opacity: 0.4;
+            pointer-events: none;
+            z-index: 5;
+          }
+
+          @keyframes glowDrift {
+            0% { transform: translate(0, 0); }
+            50% { transform: translate(60px, -40px); }
+            100% { transform: translate(0, 0); }
+          }
+        `
+      }} />
+
+      <div className="container mx-auto py-6 max-w-6xl px-4 relative z-10">
         {/* Top Navigation */}
         <div className="flex items-center justify-between mb-6">
           <Link 
@@ -615,9 +1078,10 @@ export default function MemoPage() {
           </Link>
         </div>
 
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-bold text-white mb-2" onMouseEnter={blockTranslationFeedback}>GPTXGONGMYUNG.COM</h2>
-          <p className="text-gray-400">Our 🌿Slogan - &quot;We&apos;re just. that kind of group!&quot;</p>
+        {/* 슬로건 위치 - 밤하늘 애니메이션과 함께 */}
+        <div className="text-center mb-8 relative z-10" style={{ padding: '3rem 1rem' }}>
+          <h2 className="text-3xl font-bold text-white mb-2" onMouseEnter={blockTranslationFeedback} style={{ textShadow: '0 0 6px rgba(0,0,0,0.6)' }}>GPTXGONGMYUNG.COM</h2>
+          <p className="text-gray-400" style={{ textShadow: '0 0 6px rgba(0,0,0,0.6)' }}>Our 🌿Slogan - &quot;We&apos;re just. that kind of group!&quot;</p>
         {isAuthenticated && (
           <div className="mt-4">
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
@@ -783,7 +1247,14 @@ export default function MemoPage() {
                 </div>
 
                 {isAuthenticated && (
-                  <div className="flex items-center gap-2 mt-2" onClick={(e) => e.stopPropagation()} onMouseEnter={blockTranslationFeedback}>
+                  <div 
+                    className="flex items-center gap-2 mt-2" 
+                    onClick={(e) => e.stopPropagation()} 
+                    onKeyDown={(e) => e.key === 'Enter' && e.stopPropagation()}
+                    onMouseEnter={blockTranslationFeedback}
+                    role="button"
+                    tabIndex={0}
+                  >
                     <Button
                       variant="ghost"
                       size="sm"
@@ -791,7 +1262,7 @@ export default function MemoPage() {
                       className="text-gray-400 hover:text-white"
                       onMouseEnter={blockTranslationFeedback}
                     >
-                      {content.isPublished ? <EyeOff className="h-4 w-4" /> : <EyeOff className="h-4 w-4" />}
+                      <EyeOff className="h-4 w-4" />
                     </Button>
                     <Button
                       variant="ghost"
