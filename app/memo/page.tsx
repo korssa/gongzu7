@@ -56,13 +56,26 @@ export default function MemoPage() {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    // 안전한 devicePixelRatio 처리
+    const dpr = typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1;
+
     function resizeCanvas() {
-      canvas.width = Math.floor(canvas.clientWidth * devicePixelRatio);
-      canvas.height = Math.floor(canvas.clientHeight * devicePixelRatio);
-      updateStarPositions(); // 화면 크기 변경 시 별 위치 업데이트
+      try {
+        if (!ctx) return;
+        canvas.width = Math.floor(canvas.clientWidth * dpr);
+        canvas.height = Math.floor(canvas.clientHeight * dpr);
+        ctx.scale(dpr, dpr);
+        updateStarPositions(); // 화면 크기 변경 시 별 위치 업데이트
+      } catch (error) {
+        console.warn('Canvas resize error:', error);
+      }
     }
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
+    
+    // 초기화 지연
+    setTimeout(() => {
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+    }, 100);
 
     // ========== Stars (twinkle) - 반응형 + 매우 느린 깜박임 ==========
     const rand = (a: number, b: number) => a + Math.random() * (b - a);
@@ -83,7 +96,7 @@ export default function MemoPage() {
         return {
           x: xPercent * canvas.width,
           y: yPercent * canvas.height,
-          r: rand(0.8, 2.2) * devicePixelRatio,
+          r: rand(0.8, 2.2),
           p: Math.random() * Math.PI * 2,
           twinkleSpeed: rand(0.0005, 0.002),
           xPercent,
@@ -109,16 +122,20 @@ export default function MemoPage() {
 
     // 화면 크기 변경 시 별 위치 재계산
     function updateStarPositions() {
-      stars.forEach(star => {
-        star.x = star.xPercent * canvas.width;
-        star.y = star.yPercent * canvas.height;
-        star.r = rand(0.8, 2.2) * devicePixelRatio;
-      });
+      try {
+        stars.forEach(star => {
+          star.x = star.xPercent * canvas.width;
+          star.y = star.yPercent * canvas.height;
+          star.r = rand(0.8, 2.2);
+        });
 
-      crossStars.forEach(cross => {
-        cross.x = cross.xPercent * canvas.width;
-        cross.y = cross.yPercent * canvas.height;
-      });
+        crossStars.forEach(cross => {
+          cross.x = cross.xPercent * canvas.width;
+          cross.y = cross.yPercent * canvas.height;
+        });
+      } catch (error) {
+        console.warn('Star position update error:', error);
+      }
     }
 
     initializeStars();
@@ -129,22 +146,32 @@ export default function MemoPage() {
 
     // ========== Animation Loop ==========
     function animate() {
-      if (!ctx) return;
+      if (!ctx || !canvas) return;
       
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      try {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      } catch (error) {
+        console.warn('Canvas clear error:', error);
+        return;
+      }
       
       // 일반 별들 그리기 (매우 느린 트윙클)
-      stars.forEach(star => {
-        const twinkle = 0.3 + 0.7 * Math.sin(Date.now() * star.twinkleSpeed + star.p);
-        ctx.fillStyle = `rgba(255,255,255,${twinkle * 0.9})`;
-        ctx.beginPath();
-        ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
-        ctx.fill();
-      });
+      try {
+        stars.forEach(star => {
+          const twinkle = 0.3 + 0.7 * Math.sin(Date.now() * star.twinkleSpeed + star.p);
+          ctx.fillStyle = `rgba(255,255,255,${twinkle * 0.9})`;
+          ctx.beginPath();
+          ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
+          ctx.fill();
+        });
+      } catch (error) {
+        console.warn('Star drawing error:', error);
+      }
 
       // 십자별 그리기 (아름다운 금색 광선 효과)
-      const currentTime = Date.now();
-      crossStars.forEach(cross => {
+      try {
+        const currentTime = Date.now();
+        crossStars.forEach(cross => {
         const timeSinceLastTing = currentTime - cross.lastTing;
         const shouldTing = timeSinceLastTing > cross.tingInterval;
         
@@ -236,20 +263,24 @@ export default function MemoPage() {
           });
         }
       });
+      } catch (error) {
+        console.warn('Cross star drawing error:', error);
+      }
 
       // 유성 처리 (크기와 꼬리 개선)
-      meteorTimer++;
-      if (meteorTimer > 400 && !meteor) { // 6.7초마다 유성 생성
-        meteor = {
-          x: canvas.width * 0.9,
-          y: -30,
-          vx: -12,
-          vy: 8,
-          life: 1,
-          trail: []
-        };
-        meteorTimer = 0;
-      }
+      try {
+        meteorTimer++;
+        if (meteorTimer > 400 && !meteor) { // 6.7초마다 유성 생성
+          meteor = {
+            x: canvas.width * 0.9,
+            y: -30,
+            vx: -12,
+            vy: 8,
+            life: 1,
+            trail: []
+          };
+          meteorTimer = 0;
+        }
 
       if (meteor) {
         // 유성 이동
@@ -297,18 +328,32 @@ export default function MemoPage() {
           meteor = null;
         }
       }
+      } catch (error) {
+        console.warn('Meteor drawing error:', error);
+      }
 
       requestAnimationFrame(animate);
     }
 
-    animate();
+    // 애니메이션 시작을 지연시켜 안정성 향상
+    setTimeout(() => {
+      try {
+        animate();
+      } catch (error) {
+        console.warn('Animation start error:', error);
+      }
+    }, 200);
 
     // 야광충 삭제됨 - 십자별의 진짜 별 반짝임 효과로 대체
 
     // 컴포넌트 언마운트 시 정리
     return () => {
-      window.removeEventListener('resize', resizeCanvas);
-      document.querySelectorAll('.glowbug').forEach(el => el.remove());
+      try {
+        window.removeEventListener('resize', resizeCanvas);
+        document.querySelectorAll('.glowbug').forEach(el => el.remove());
+      } catch (error) {
+        console.warn('Cleanup error:', error);
+      }
     };
   }, []);
 
