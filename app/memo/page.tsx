@@ -63,24 +63,27 @@ export default function MemoPage() {
     resizeCanvas();
     window.addEventListener('resize', resizeCanvas);
 
-    // ========== Stars (twinkle) - 훨씬 많이 ==========
+    // ========== Stars (twinkle) - 매우 느린 깜박임 ==========
     const rand = (a: number, b: number) => a + Math.random() * (b - a);
-    const stars = Array.from({ length: 240 }, () => ({
+    const stars = Array.from({ length: 300 }, () => ({
       x: Math.random() * canvas.width,
-      y: Math.random() * canvas.height * 0.9,
-      r: rand(0.6, 1.8) * devicePixelRatio,
-      p: Math.random() * Math.PI * 2
+      y: Math.random() * canvas.height,
+      r: rand(0.8, 2.2) * devicePixelRatio,
+      p: Math.random() * Math.PI * 2,
+      twinkleSpeed: rand(0.0005, 0.002) // 매우 느린 깜박임 (며초에 한번)
     }));
 
-    // ========== Cross Stars (8방향, 주축 길고 대각 짧게) ==========
-    const crossStars = Array.from({ length: 7 }, () => ({
-      x: rand(canvas.width * 0.05, canvas.width * 0.95),
-      y: rand(canvas.height * 0.1, canvas.height * 0.8),
-      size: rand(8, 16),
-      phase: Math.random() * Math.PI * 2
+    // ========== Cross Stars (팅 광선 효과) ==========
+    const crossStars = Array.from({ length: 5 }, () => ({
+      x: rand(canvas.width * 0.1, canvas.width * 0.9),
+      y: rand(canvas.height * 0.1, canvas.height * 0.9),
+      size: rand(12, 20),
+      phase: Math.random() * Math.PI * 2,
+      tingInterval: rand(3000, 8000), // 3-8초 간격으로 팅
+      lastTing: 0
     }));
 
-    // ========== Meteor ==========
+    // ========== Meteor (크기와 꼬리 개선) ==========
     let meteor: { x: number; y: number; vx: number; vy: number; life: number; trail: Array<{x: number; y: number; life: number}> } | null = null;
     let meteorTimer = 0;
 
@@ -90,48 +93,73 @@ export default function MemoPage() {
       
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
-      // 일반 별들 그리기 (트윙클)
+      // 일반 별들 그리기 (매우 느린 트윙클)
       stars.forEach(star => {
-        const twinkle = 0.5 + 0.5 * Math.sin(Date.now() * 0.002 + star.p);
-        ctx.fillStyle = `rgba(255,255,255,${twinkle * 0.8})`;
+        const twinkle = 0.3 + 0.7 * Math.sin(Date.now() * star.twinkleSpeed + star.p);
+        ctx.fillStyle = `rgba(255,255,255,${twinkle * 0.9})`;
         ctx.beginPath();
         ctx.arc(star.x, star.y, star.r, 0, Math.PI * 2);
         ctx.fill();
       });
 
-      // 십자별 그리기 (8방향)
+      // 십자별 그리기 (팅 광선 효과)
+      const currentTime = Date.now();
       crossStars.forEach(cross => {
-        const twinkle = 0.6 + 0.4 * Math.sin(Date.now() * 0.003 + cross.phase);
-        ctx.strokeStyle = `rgba(255,255,255,${twinkle})`;
-        ctx.lineWidth = 1.5;
-        ctx.lineCap = 'round';
+        const timeSinceLastTing = currentTime - cross.lastTing;
+        const shouldTing = timeSinceLastTing > cross.tingInterval;
         
-        // 주축 (상하좌우) - 길게
-        ctx.beginPath();
-        ctx.moveTo(cross.x, cross.y - cross.size);
-        ctx.lineTo(cross.x, cross.y + cross.size);
-        ctx.moveTo(cross.x - cross.size, cross.y);
-        ctx.lineTo(cross.x + cross.size, cross.y);
-        ctx.stroke();
+        if (shouldTing) {
+          cross.lastTing = currentTime;
+        }
         
-        // 대각선 - 짧게
-        const diagSize = cross.size * 0.6;
-        ctx.beginPath();
-        ctx.moveTo(cross.x - diagSize, cross.y - diagSize);
-        ctx.lineTo(cross.x + diagSize, cross.y + diagSize);
-        ctx.moveTo(cross.x - diagSize, cross.y + diagSize);
-        ctx.lineTo(cross.x + diagSize, cross.y - diagSize);
-        ctx.stroke();
+        // 팅 효과 계산 (팅 후 1초간 지속)
+        const tingProgress = Math.min(timeSinceLastTing / 1000, 1);
+        const tingIntensity = shouldTing ? 1 : Math.max(0, 1 - tingProgress);
+        
+        if (tingIntensity > 0) {
+          // 메인 십자가 (세로, 가로)
+          ctx.strokeStyle = `rgba(255,255,255,${tingIntensity * 0.9})`;
+          ctx.lineWidth = 2;
+          ctx.lineCap = 'round';
+          
+          ctx.beginPath();
+          ctx.moveTo(cross.x, cross.y - cross.size);
+          ctx.lineTo(cross.x, cross.y + cross.size);
+          ctx.moveTo(cross.x - cross.size, cross.y);
+          ctx.lineTo(cross.x + cross.size, cross.y);
+          ctx.stroke();
+          
+          // 8방향 작은 점들 (팅 광선)
+          const dotSize = cross.size * 0.3;
+          const dotPositions = [
+            { x: cross.x + cross.size * 0.7, y: cross.y - cross.size * 0.7 }, // 우상단
+            { x: cross.x + cross.size * 0.7, y: cross.y + cross.size * 0.7 }, // 우하단
+            { x: cross.x - cross.size * 0.7, y: cross.y + cross.size * 0.7 }, // 좌하단
+            { x: cross.x - cross.size * 0.7, y: cross.y - cross.size * 0.7 }, // 좌상단
+            { x: cross.x + cross.size * 0.8, y: cross.y }, // 우측
+            { x: cross.x, y: cross.y + cross.size * 0.8 }, // 하단
+            { x: cross.x - cross.size * 0.8, y: cross.y }, // 좌측
+            { x: cross.x, y: cross.y - cross.size * 0.8 }  // 상단
+          ];
+          
+          dotPositions.forEach((pos, i) => {
+            const dotAlpha = tingIntensity * (0.8 - i * 0.1);
+            ctx.fillStyle = `rgba(255,255,255,${dotAlpha})`;
+            ctx.beginPath();
+            ctx.arc(pos.x, pos.y, dotSize, 0, Math.PI * 2);
+            ctx.fill();
+          });
+        }
       });
 
-      // 유성 처리
+      // 유성 처리 (크기와 꼬리 개선)
       meteorTimer++;
-      if (meteorTimer > 300 && !meteor) { // 5초마다 유성 생성
+      if (meteorTimer > 400 && !meteor) { // 6.7초마다 유성 생성
         meteor = {
           x: canvas.width * 0.9,
-          y: -20,
-          vx: -8,
-          vy: 6,
+          y: -30,
+          vx: -12,
+          vy: 8,
           life: 1,
           trail: []
         };
@@ -142,31 +170,45 @@ export default function MemoPage() {
         // 유성 이동
         meteor.x += meteor.vx;
         meteor.y += meteor.vy;
-        meteor.life -= 0.02;
+        meteor.life -= 0.015;
         
-        // 꼬리 추가
+        // 꼬리 추가 (더 자주, 더 길게)
         meteor.trail.push({ x: meteor.x, y: meteor.y, life: 1 });
-        if (meteor.trail.length > 15) meteor.trail.shift();
+        if (meteor.trail.length > 40) meteor.trail.shift(); // 꼬리 길이 증가
         
-        // 꼬리 그리기
+        // 꼬리 그리기 (더 긴 그라디언트)
         meteor.trail.forEach((point, i) => {
           const alpha = (point.life * i) / meteor!.trail.length;
-          const gradient = ctx.createLinearGradient(point.x, point.y, point.x - 20, point.y + 20);
-          gradient.addColorStop(0, `rgba(255,255,255,${alpha * 0.8})`);
+          const trailLength = 60; // 꼬리 길이 증가
+          const gradient = ctx.createLinearGradient(
+            point.x, point.y, 
+            point.x - trailLength, point.y + trailLength
+          );
+          gradient.addColorStop(0, `rgba(255,255,255,${alpha * 0.9})`);
+          gradient.addColorStop(0.3, `rgba(255,255,255,${alpha * 0.6})`);
           gradient.addColorStop(1, 'rgba(255,255,255,0)');
           
           ctx.fillStyle = gradient;
-          ctx.fillRect(point.x - 1, point.y - 1, 2, 2);
-          point.life -= 0.1;
+          ctx.fillRect(point.x - 2, point.y - 2, 4, 4);
+          point.life -= 0.08;
         });
         
-        // 유성 머리 그리기
+        // 유성 머리 그리기 (더 크게)
+        const headSize = 6 + (meteor.life * 2); // 크기 증가
         ctx.fillStyle = `rgba(255,255,255,${meteor.life})`;
         ctx.beginPath();
-        ctx.arc(meteor.x, meteor.y, 3, 0, Math.PI * 2);
+        ctx.arc(meteor.x, meteor.y, headSize, 0, Math.PI * 2);
         ctx.fill();
         
-        if (meteor.life <= 0 || meteor.x < -50) {
+        // 유성 머리 글로우 효과
+        ctx.shadowColor = 'rgba(255,255,255,0.8)';
+        ctx.shadowBlur = 10;
+        ctx.beginPath();
+        ctx.arc(meteor.x, meteor.y, headSize * 0.7, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.shadowBlur = 0;
+        
+        if (meteor.life <= 0 || meteor.x < -100) {
           meteor = null;
         }
       }
@@ -176,13 +218,13 @@ export default function MemoPage() {
 
     animate();
 
-    // 🐛 야광충 30마리 생성 (더 많이, 더 야광색)
-    for (let i = 0; i < 30; i++) {
+    // 🐛 야광충 10마리 생성 (초록빛 강화, 랜덤 움직임)
+    for (let i = 0; i < 10; i++) {
       const bug = document.createElement('div');
       bug.className = 'glowbug';
-      bug.style.top = `${60 + Math.random() * 30}%`;
+      bug.style.top = `${Math.random() * 100}%`;
       bug.style.left = `${Math.random() * 100}%`;
-      bug.style.setProperty('--t', `${12 + Math.random() * 8}s`);
+      bug.style.setProperty('--t', `${15 + Math.random() * 10}s`);
       document.body.appendChild(bug);
     }
 
@@ -487,11 +529,11 @@ export default function MemoPage() {
         {/* 🌌 GPTXGONGMYUNG MEMO - Night Sky Animation (Canvas ver.) */}
         <style dangerouslySetInnerHTML={{
           __html: `
-          /* 🌟 상단 캔버스 영역 */
+          /* 🌟 전체 화면 캔버스 영역 */
           #skyCanvas {
             position: fixed;
             top: 0; left: 0;
-            width: 100vw; height: 40vh;
+            width: 100vw; height: 100vh;
             pointer-events: none;
             z-index: 1;
           }
@@ -507,15 +549,22 @@ export default function MemoPage() {
           }
           @keyframes moonFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }
 
-          /* 🐛 야광충 (본문) - 더 야광색 빛 강화 */
+          /* 🐛 야광충 (본문) - 초록빛 강화, 그로우 효과 */
           .glowbug {
-            position: fixed; width: 12px; height: 12px; opacity: .6; pointer-events:none; z-index: 5;
-            background: radial-gradient(circle, rgba(200,255,180,.95) 0%, rgba(200,255,180,.6) 25%, rgba(200,255,180,.3) 50%, transparent 70%);
-            filter: blur(1.5px) brightness(1.2);
-            animation: drift var(--t,14s) ease-in-out infinite;
-            box-shadow: 0 0 8px rgba(200,255,180,0.4);
+            position: fixed; width: 14px; height: 14px; opacity: .8; pointer-events:none; z-index: 5;
+            background: radial-gradient(circle, rgba(100,255,100,.95) 0%, rgba(150,255,150,.8) 30%, rgba(200,255,200,.4) 60%, transparent 80%);
+            filter: blur(2px) brightness(1.5) saturate(1.3);
+            animation: randomDrift var(--t,18s) ease-in-out infinite;
+            box-shadow: 0 0 15px rgba(100,255,100,0.6), 0 0 30px rgba(100,255,100,0.3);
+            border-radius: 50%;
           }
-          @keyframes drift { 0%{ transform:translate(0,0)} 50%{ transform:translate(60px,-40px)} 100%{ transform:translate(0,0)} }
+          @keyframes randomDrift { 
+            0%{ transform:translate(0,0) scale(1); } 
+            25%{ transform:translate(40px,-30px) scale(1.2); } 
+            50%{ transform:translate(80px,20px) scale(0.8); } 
+            75%{ transform:translate(20px,60px) scale(1.1); } 
+            100%{ transform:translate(0,0) scale(1); } 
+          }
 
           /* 배경 별빛 살짝 (CSS 레이어) */
           body::before{
@@ -627,11 +676,11 @@ export default function MemoPage() {
         {/* 🌌 GPTXGONGMYUNG MEMO - Night Sky Animation (Canvas ver.) */}
         <style dangerouslySetInnerHTML={{
           __html: `
-          /* 🌟 상단 캔버스 영역 */
+          /* 🌟 전체 화면 캔버스 영역 */
           #skyCanvas {
             position: fixed;
             top: 0; left: 0;
-            width: 100vw; height: 40vh;
+            width: 100vw; height: 100vh;
             pointer-events: none;
             z-index: 1;
           }
@@ -647,15 +696,22 @@ export default function MemoPage() {
           }
           @keyframes moonFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }
 
-          /* 🐛 야광충 (본문) - 더 야광색 빛 강화 */
+          /* 🐛 야광충 (본문) - 초록빛 강화, 그로우 효과 */
           .glowbug {
-            position: fixed; width: 12px; height: 12px; opacity: .6; pointer-events:none; z-index: 5;
-            background: radial-gradient(circle, rgba(200,255,180,.95) 0%, rgba(200,255,180,.6) 25%, rgba(200,255,180,.3) 50%, transparent 70%);
-            filter: blur(1.5px) brightness(1.2);
-            animation: drift var(--t,14s) ease-in-out infinite;
-            box-shadow: 0 0 8px rgba(200,255,180,0.4);
+            position: fixed; width: 14px; height: 14px; opacity: .8; pointer-events:none; z-index: 5;
+            background: radial-gradient(circle, rgba(100,255,100,.95) 0%, rgba(150,255,150,.8) 30%, rgba(200,255,200,.4) 60%, transparent 80%);
+            filter: blur(2px) brightness(1.5) saturate(1.3);
+            animation: randomDrift var(--t,18s) ease-in-out infinite;
+            box-shadow: 0 0 15px rgba(100,255,100,0.6), 0 0 30px rgba(100,255,100,0.3);
+            border-radius: 50%;
           }
-          @keyframes drift { 0%{ transform:translate(0,0)} 50%{ transform:translate(60px,-40px)} 100%{ transform:translate(0,0)} }
+          @keyframes randomDrift { 
+            0%{ transform:translate(0,0) scale(1); } 
+            25%{ transform:translate(40px,-30px) scale(1.2); } 
+            50%{ transform:translate(80px,20px) scale(0.8); } 
+            75%{ transform:translate(20px,60px) scale(1.1); } 
+            100%{ transform:translate(0,0) scale(1); } 
+          }
 
           /* 배경 별빛 살짝 (CSS 레이어) */
           body::before{
@@ -688,11 +744,11 @@ export default function MemoPage() {
         {/* 🌌 GPTXGONGMYUNG MEMO - Night Sky Animation (Canvas ver.) */}
         <style dangerouslySetInnerHTML={{
           __html: `
-          /* 🌟 상단 캔버스 영역 */
+          /* 🌟 전체 화면 캔버스 영역 */
           #skyCanvas {
             position: fixed;
             top: 0; left: 0;
-            width: 100vw; height: 40vh;
+            width: 100vw; height: 100vh;
             pointer-events: none;
             z-index: 1;
           }
@@ -708,15 +764,22 @@ export default function MemoPage() {
           }
           @keyframes moonFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }
 
-          /* 🐛 야광충 (본문) - 더 야광색 빛 강화 */
+          /* 🐛 야광충 (본문) - 초록빛 강화, 그로우 효과 */
           .glowbug {
-            position: fixed; width: 12px; height: 12px; opacity: .6; pointer-events:none; z-index: 5;
-            background: radial-gradient(circle, rgba(200,255,180,.95) 0%, rgba(200,255,180,.6) 25%, rgba(200,255,180,.3) 50%, transparent 70%);
-            filter: blur(1.5px) brightness(1.2);
-            animation: drift var(--t,14s) ease-in-out infinite;
-            box-shadow: 0 0 8px rgba(200,255,180,0.4);
+            position: fixed; width: 14px; height: 14px; opacity: .8; pointer-events:none; z-index: 5;
+            background: radial-gradient(circle, rgba(100,255,100,.95) 0%, rgba(150,255,150,.8) 30%, rgba(200,255,200,.4) 60%, transparent 80%);
+            filter: blur(2px) brightness(1.5) saturate(1.3);
+            animation: randomDrift var(--t,18s) ease-in-out infinite;
+            box-shadow: 0 0 15px rgba(100,255,100,0.6), 0 0 30px rgba(100,255,100,0.3);
+            border-radius: 50%;
           }
-          @keyframes drift { 0%{ transform:translate(0,0)} 50%{ transform:translate(60px,-40px)} 100%{ transform:translate(0,0)} }
+          @keyframes randomDrift { 
+            0%{ transform:translate(0,0) scale(1); } 
+            25%{ transform:translate(40px,-30px) scale(1.2); } 
+            50%{ transform:translate(80px,20px) scale(0.8); } 
+            75%{ transform:translate(20px,60px) scale(1.1); } 
+            100%{ transform:translate(0,0) scale(1); } 
+          }
 
           /* 배경 별빛 살짝 (CSS 레이어) */
           body::before{
@@ -892,11 +955,11 @@ export default function MemoPage() {
       {/* 🌌 GPTXGONGMYUNG MEMO - Night Sky Animation (Canvas ver.) */}
       <style dangerouslySetInnerHTML={{
         __html: `
-          /* 🌟 상단 캔버스 영역 */
+          /* 🌟 전체 화면 캔버스 영역 */
           #skyCanvas {
             position: fixed;
             top: 0; left: 0;
-            width: 100vw; height: 40vh;
+            width: 100vw; height: 100vh;
             pointer-events: none;
             z-index: 1;
           }
@@ -912,15 +975,22 @@ export default function MemoPage() {
           }
           @keyframes moonFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(8px)} }
 
-          /* 🐛 야광충 (본문) - 더 야광색 빛 강화 */
+          /* 🐛 야광충 (본문) - 초록빛 강화, 그로우 효과 */
           .glowbug {
-            position: fixed; width: 12px; height: 12px; opacity: .6; pointer-events:none; z-index: 5;
-            background: radial-gradient(circle, rgba(200,255,180,.95) 0%, rgba(200,255,180,.6) 25%, rgba(200,255,180,.3) 50%, transparent 70%);
-            filter: blur(1.5px) brightness(1.2);
-            animation: drift var(--t,14s) ease-in-out infinite;
-            box-shadow: 0 0 8px rgba(200,255,180,0.4);
+            position: fixed; width: 14px; height: 14px; opacity: .8; pointer-events:none; z-index: 5;
+            background: radial-gradient(circle, rgba(100,255,100,.95) 0%, rgba(150,255,150,.8) 30%, rgba(200,255,200,.4) 60%, transparent 80%);
+            filter: blur(2px) brightness(1.5) saturate(1.3);
+            animation: randomDrift var(--t,18s) ease-in-out infinite;
+            box-shadow: 0 0 15px rgba(100,255,100,0.6), 0 0 30px rgba(100,255,100,0.3);
+            border-radius: 50%;
           }
-          @keyframes drift { 0%{ transform:translate(0,0)} 50%{ transform:translate(60px,-40px)} 100%{ transform:translate(0,0)} }
+          @keyframes randomDrift { 
+            0%{ transform:translate(0,0) scale(1); } 
+            25%{ transform:translate(40px,-30px) scale(1.2); } 
+            50%{ transform:translate(80px,20px) scale(0.8); } 
+            75%{ transform:translate(20px,60px) scale(1.1); } 
+            100%{ transform:translate(0,0) scale(1); } 
+          }
 
           /* 배경 별빛 살짝 (CSS 레이어) */
           body::before{
