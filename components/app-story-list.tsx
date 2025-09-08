@@ -801,11 +801,11 @@ export function AppStoryList({ type, onBack }: AppStoryListProps) {
            >
             <CardHeader className="pb-3">
               {content.imageUrl && (
-                <div className="aspect-video overflow-hidden rounded-lg mb-3">
+                <div className="mb-3">
                   <img
                     src={content.imageUrl}
                     alt={content.title}
-                    className="w-full h-full object-cover"
+                    className="w-full h-auto rounded-lg"
                   />
                 </div>
               )}
