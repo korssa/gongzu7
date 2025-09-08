@@ -93,6 +93,7 @@ export default function RootLayout({
       </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        style={{ marginTop: 0, paddingTop: 0, top: 0 }}
         suppressHydrationWarning={true}
       >
         {children}

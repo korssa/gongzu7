@@ -466,6 +466,15 @@ export default function Home() {
 
 
 
+  // 홈 화면 진입 시 body 여백 및 스크롤 위치 초기화
+  useEffect(() => {
+    // 스크롤 최상단 + 여백 제거
+    document.body.style.marginTop = "0px";
+    document.body.style.paddingTop = "0px";
+    document.body.style.top = "0px";
+    window.scrollTo(0, 0);
+  }, []);
+
   // 앱 목록 로드 및 동기화 (전역 스토어 사용)
   useEffect(() => {
     // StrictMode 이중 실행 방지

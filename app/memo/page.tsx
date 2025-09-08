@@ -537,32 +537,16 @@ export default function MemoPage() {
         {/* 🌌 GPTXGONGMYUNG MEMO - Night Sky Animation (Canvas ver.) */}
         <style dangerouslySetInnerHTML={{
           __html: `
-          /* 🌟 전체 화면 캔버스 영역 */
-          #skyCanvas {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            pointer-events: none;
-            z-index: 1;
-          }
+          /* 캔버스 테마 제거 */
           
           /* 달 제거됨 */
 
           /* 야광충 삭제됨 - 십자별의 진짜 별 반짝임 효과로 대체 */
 
-          /* 배경 별빛 살짝 (CSS 레이어) */
-          body::before{
-            content:""; position:fixed; top:0; left:0; width:100vw; height:40vh; z-index:0; pointer-events:none;
-            background:
-              radial-gradient(circle at 20% 30%, rgba(255,255,255,.08), transparent 55%),
-              radial-gradient(circle at 80% 40%, rgba(255,255,255,.06), transparent 60%),
-              radial-gradient(circle at 10% 10%, rgba(255,255,255,.06), transparent 60%),
-              radial-gradient(circle at 50% 70%, rgba(200,255,255,.05), transparent 55%);
-          }
+          /* 메모 페이지 테마 제거 - 홈페이지에 영향 주지 않도록 */
           
         `}} />
 
-        <canvas id="skyCanvas"></canvas>
         
         <div className="container mx-auto max-w-6xl px-4 relative z-10">
           {/* Top Navigation */}
@@ -660,32 +644,16 @@ export default function MemoPage() {
         {/* 🌌 GPTXGONGMYUNG MEMO - Night Sky Animation (Canvas ver.) */}
         <style dangerouslySetInnerHTML={{
           __html: `
-          /* 🌟 전체 화면 캔버스 영역 */
-          #skyCanvas {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            pointer-events: none;
-            z-index: 1;
-          }
+          /* 캔버스 테마 제거 */
           
           /* 달 제거됨 */
 
           /* 야광충 삭제됨 - 십자별의 진짜 별 반짝임 효과로 대체 */
 
-          /* 배경 별빛 살짝 (CSS 레이어) */
-          body::before{
-            content:""; position:fixed; top:0; left:0; width:100vw; height:40vh; z-index:0; pointer-events:none;
-            background:
-              radial-gradient(circle at 20% 30%, rgba(255,255,255,.08), transparent 55%),
-              radial-gradient(circle at 80% 40%, rgba(255,255,255,.06), transparent 60%),
-              radial-gradient(circle at 10% 10%, rgba(255,255,255,.06), transparent 60%),
-              radial-gradient(circle at 50% 70%, rgba(200,255,255,.05), transparent 55%);
-          }
+          /* 메모 페이지 테마 제거 - 홈페이지에 영향 주지 않도록 */
           
         `}} />
 
-        <canvas id="skyCanvas"></canvas>
         <SoftGlowStar />
         
         <div className="container mx-auto max-w-6xl px-4 relative z-10">
@@ -705,32 +673,16 @@ export default function MemoPage() {
         {/* 🌌 GPTXGONGMYUNG MEMO - Night Sky Animation (Canvas ver.) */}
         <style dangerouslySetInnerHTML={{
           __html: `
-          /* 🌟 전체 화면 캔버스 영역 */
-          #skyCanvas {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            pointer-events: none;
-            z-index: 1;
-          }
+          /* 캔버스 테마 제거 */
           
           /* 달 제거됨 */
 
           /* 야광충 삭제됨 - 십자별의 진짜 별 반짝임 효과로 대체 */
 
-          /* 배경 별빛 살짝 (CSS 레이어) */
-          body::before{
-            content:""; position:fixed; top:0; left:0; width:100vw; height:40vh; z-index:0; pointer-events:none;
-            background:
-              radial-gradient(circle at 20% 30%, rgba(255,255,255,.08), transparent 55%),
-              radial-gradient(circle at 80% 40%, rgba(255,255,255,.06), transparent 60%),
-              radial-gradient(circle at 10% 10%, rgba(255,255,255,.06), transparent 60%),
-              radial-gradient(circle at 50% 70%, rgba(200,255,255,.05), transparent 55%);
-          }
+          /* 메모 페이지 테마 제거 - 홈페이지에 영향 주지 않도록 */
           
         `}} />
 
-        <canvas id="skyCanvas"></canvas>
         
         <div className="container mx-auto max-w-6xl px-4 relative z-10">
           {/* Top Navigation */}
@@ -892,28 +844,13 @@ export default function MemoPage() {
       {/* 🌌 GPTXGONGMYUNG MEMO - Night Sky Animation (Canvas ver.) */}
       <style dangerouslySetInnerHTML={{
         __html: `
-          /* 🌟 전체 화면 캔버스 영역 */
-          #skyCanvas {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100vw; height: 100vh;
-            pointer-events: none;
-            z-index: 1;
-          }
+          /* 캔버스 테마 제거 */
           
           /* 달 제거됨 */
 
           /* 야광충 삭제됨 - 십자별의 진짜 별 반짝임 효과로 대체 */
 
-          /* 배경 별빛 살짝 (CSS 레이어) */
-          body::before{
-            content:""; position:fixed; top:0; left:0; width:100vw; height:40vh; z-index:0; pointer-events:none;
-            background:
-              radial-gradient(circle at 20% 30%, rgba(255,255,255,.08), transparent 55%),
-              radial-gradient(circle at 80% 40%, rgba(255,255,255,.06), transparent 60%),
-              radial-gradient(circle at 10% 10%, rgba(255,255,255,.06), transparent 60%),
-              radial-gradient(circle at 50% 70%, rgba(200,255,255,.05), transparent 55%);
-          }
+          /* 메모 페이지 테마 제거 - 홈페이지에 영향 주지 않도록 */
           
         `
       }} />
