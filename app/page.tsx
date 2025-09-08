@@ -26,6 +26,7 @@ import { validateAppsImages } from "@/lib/image-utils";
 import { uploadFile, deleteFile } from "@/lib/storage-adapter";
 import { loadAppsFromBlob, loadAppsByTypeFromBlob, saveAppsByTypeToBlob, loadFeaturedIds, loadEventIds, saveFeaturedIds, saveEventIds } from "@/lib/data-loader";
 import { blockTranslationFeedback, createAdminButtonHandler } from "@/lib/translation-utils";
+import { useTranslationShield } from "@/hooks/use-translation-shield";
 import { AppGallery } from "@/components/app-gallery";
 import { GalleryManager } from "@/components/gallery-manager";
 import Image from "next/image";
@@ -60,6 +61,9 @@ export default function Home() {
   const { t } = useLanguage();
   const { isAuthenticated: isAdmin } = useAdmin();
   const [adminVisible, setAdminVisible] = useState(false);
+
+  // 실시간 번역 피드백 감시 시스템 활성화
+  useTranslationShield();
 
   // 전역 스토어 사용
   // 로컬 상태로 앱 데이터 관리 (Zustand 제거)
