@@ -25,6 +25,7 @@ import { useAdmin } from "@/hooks/use-admin";
 import { uploadFile } from "@/lib/storage-adapter";
 import { blockTranslationFeedback, createAdminButtonHandler } from "@/lib/translation-utils";
 import { loadMemoDraft, saveMemoDraft, clearMemoDraft } from "@/lib/memo-storage";
+import { GoogleTranslateWidget } from "@/components/google-translate-widget";
 import Link from "next/link";
 import SoftGlowStar from "@/components/soft-glow-star";
 
@@ -927,6 +928,9 @@ export default function MemoPage() {
             <Home className="w-4 h-4" />
             Home
           </Link>
+          
+          {/* 구글 번역 위젯 */}
+          <GoogleTranslateWidget />
         </div>
 
         {/* 슬로건 위치 - 밤하늘 애니메이션과 함께 */}
