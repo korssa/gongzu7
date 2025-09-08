@@ -555,17 +555,6 @@ export default function MemoPage() {
               radial-gradient(circle at 50% 70%, rgba(200,255,255,.05), transparent 55%);
           }
           
-          /* 테마 고정 - 모바일에서 검정 배경 유지 */
-          html, body {
-            background-color: #000000 !important;
-            color-scheme: dark !important;
-          }
-          
-          /* 링크 영역 테마 고정 */
-          a, .bg-black {
-            background-color: #000000 !important;
-            color: #ffffff !important;
-          }
         `}} />
 
         <canvas id="skyCanvas"></canvas>
@@ -689,17 +678,6 @@ export default function MemoPage() {
               radial-gradient(circle at 50% 70%, rgba(200,255,255,.05), transparent 55%);
           }
           
-          /* 테마 고정 - 모바일에서 검정 배경 유지 */
-          html, body {
-            background-color: #000000 !important;
-            color-scheme: dark !important;
-          }
-          
-          /* 링크 영역 테마 고정 */
-          a, .bg-black {
-            background-color: #000000 !important;
-            color: #ffffff !important;
-          }
         `}} />
 
         <canvas id="skyCanvas"></canvas>
@@ -745,17 +723,6 @@ export default function MemoPage() {
               radial-gradient(circle at 50% 70%, rgba(200,255,255,.05), transparent 55%);
           }
           
-          /* 테마 고정 - 모바일에서 검정 배경 유지 */
-          html, body {
-            background-color: #000000 !important;
-            color-scheme: dark !important;
-          }
-          
-          /* 링크 영역 테마 고정 */
-          a, .bg-black {
-            background-color: #000000 !important;
-            color: #ffffff !important;
-          }
         `}} />
 
         <canvas id="skyCanvas"></canvas>
@@ -943,17 +910,6 @@ export default function MemoPage() {
               radial-gradient(circle at 50% 70%, rgba(200,255,255,.05), transparent 55%);
           }
           
-          /* 테마 고정 - 모바일에서 검정 배경 유지 */
-          html, body {
-            background-color: #000000 !important;
-            color-scheme: dark !important;
-          }
-          
-          /* 링크 영역 테마 고정 */
-          a, .bg-black {
-            background-color: #000000 !important;
-            color: #ffffff !important;
-          }
         `
       }} />
 
