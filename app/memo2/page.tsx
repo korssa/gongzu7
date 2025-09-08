@@ -39,7 +39,7 @@ export default function MemoPage() {
     title: "",
     content: "",
     author: "",
-    type: 'memo' as ContentType,
+    type: 'memo2' as ContentType,
     tags: "",
     isPublished: true,
   });
@@ -251,7 +251,7 @@ export default function MemoPage() {
   // 위젯 토글 시 메모 저장 브로드캐스트 수신
   useEffect(() => {
     const handler = () => {
-      saveMemoDraft('memo', {
+      saveMemoDraft('memo2', {
         title: formData.title,
         content: formData.content,
         author: formData.author,
@@ -265,7 +265,7 @@ export default function MemoPage() {
 
   // 폼 로컬 캐시 복원
   useEffect(() => {
-    const draft = loadMemoDraft('memo');
+    const draft = loadMemoDraft('memo2');
     if (draft) {
       setFormData(prev => ({
         ...prev,
@@ -280,7 +280,7 @@ export default function MemoPage() {
 
   // 폼 변경 즉시 저장
   useEffect(() => {
-    saveMemoDraft('memo', {
+    saveMemoDraft('memo2', {
       title: formData.title,
       content: formData.content,
       author: formData.author,
@@ -296,29 +296,29 @@ export default function MemoPage() {
         setLoading(true);
         
         // 먼저 기존 API에서 memo 타입 콘텐츠 로드 시도
-        console.log('📝 [Memo] Loading memo content from API...');
-        const res = await fetch(`/api/content?type=memo`);
+        console.log('📝 [Memo2] Loading memo2 content from API...');
+        const res = await fetch(`/api/content?type=memo2`);
         
         if (res.ok) {
           const data = await res.json();
           const finalContents = isAuthenticated ? data : data.filter((c: ContentItem) => c.isPublished);
           setContents(finalContents);
-          console.log('📝 [Memo] Content loaded from API:', finalContents.length, 'items');
+          console.log('📝 [Memo2] Content loaded from API:', finalContents.length, 'items');
         } else {
-          console.warn('📝 [Memo] API load failed, trying Blob...');
+          console.warn('📝 [Memo2] API load failed, trying Blob...');
           // API 실패 시 Blob에서 로드 시도
           const blobContents = await loadContentsFromBlob();
-          console.log('📝 [Memo] Total content loaded from Blob:', blobContents.length, 'items');
+          console.log('📝 [Memo2] Total content loaded from Blob:', blobContents.length, 'items');
           
-          const filteredBlobContents = blobContents.filter((c: ContentItem) => c.type === 'memo');
-          console.log('📝 [Memo] Filtered memo content:', filteredBlobContents.length, 'items');
+          const filteredBlobContents = blobContents.filter((c: ContentItem) => c.type === 'memo2');
+          console.log('📝 [Memo2] Filtered memo2 content:', filteredBlobContents.length, 'items');
           
           const finalContents = isAuthenticated ? filteredBlobContents : filteredBlobContents.filter((c: ContentItem) => c.isPublished);
           setContents(finalContents);
-          console.log('📝 [Memo] Final content set from Blob:', finalContents.length, 'items');
+          console.log('📝 [Memo2] Final content set from Blob:', finalContents.length, 'items');
         }
       } catch (err) {
-        console.error('📝 [Memo] Failed to load content:', err);
+        console.error('📝 [Memo2] Failed to load content:', err);
         setContents([]);
       } finally {
         setLoading(false);
@@ -371,14 +371,14 @@ export default function MemoPage() {
       title: "",
       content: "",
       author: "",
-      type: 'memo' as ContentType,
+      type: 'memo2' as ContentType,
       tags: "",
       isPublished: true,
     });
     setEditingContent(null);
     setSelectedImage(null);
     setImagePreview(null);
-    clearMemoDraft('memo');
+    clearMemoDraft('memo2');
   };
 
   // 이미지 선택 핸들러
@@ -443,11 +443,11 @@ export default function MemoPage() {
       if (response.ok) {
         setIsDialogOpen(false);
         resetForm();
-        clearMemoDraft('memo');
+        clearMemoDraft('memo2');
         
         // 콘텐츠 목록 다시 로드
         try {
-          const res = await fetch(`/api/content?type=memo`);
+          const res = await fetch(`/api/content?type=memo2`);
           if (res.ok) {
             const data = await res.json();
             setContents(isAuthenticated ? data : data.filter((c: ContentItem) => c.isPublished));
@@ -456,18 +456,18 @@ export default function MemoPage() {
           // 목록 새로고침 실패
         }
         
-        alert(editingContent ? 'Memo has been updated.' : 'Memo has been saved.');
+        alert(editingContent ? 'Memo2 has been updated.' : 'Memo2 has been saved.');
       } else {
-        let message = 'Failed to save memo.';
+        let message = 'Failed to save memo2.';
         try {
           const err = await response.json();
-          if (err?.error) message = `Failed to save memo: ${err.error}`;
+          if (err?.error) message = `Failed to save memo2: ${err.error}`;
           if (err?.details) message += `\nDetails: ${err.details}`;
         } catch {}
         alert(message);
       }
     } catch {
-      alert('Failed to save memo.');
+      alert('Failed to save memo2.');
     }
   };
 
@@ -483,7 +483,7 @@ export default function MemoPage() {
       if (response.ok) {
         // 콘텐츠 목록 다시 로드
         try {
-          const res = await fetch(`/api/content?type=memo`);
+          const res = await fetch(`/api/content?type=memo2`);
           if (res.ok) {
             const data = await res.json();
             setContents(isAuthenticated ? data : data.filter((c: ContentItem) => c.isPublished));
@@ -492,7 +492,7 @@ export default function MemoPage() {
           // 삭제 후 목록 새로고침 실패
         }
         
-        alert('Memo has been deleted.');
+        alert('Memo2 has been deleted.');
       }
     } catch {
       // 삭제 실패
@@ -526,7 +526,7 @@ export default function MemoPage() {
       });
 
       if (response.ok) {
-        const res = await fetch(`/api/content?type=memo`);
+        const res = await fetch(`/api/content?type=memo2`);
         const data = await res.json();
         setContents(isAuthenticated ? data : data.filter((c: ContentItem) => c.isPublished));
       }
@@ -694,7 +694,7 @@ export default function MemoPage() {
         <div className="container mx-auto py-6 max-w-6xl px-4 relative z-10">
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-400 mx-auto"></div>
-            <p className="text-gray-400 mt-4">Loading memos...</p>
+            <p className="text-gray-400 mt-4">Loading memo2...</p>
           </div>
         </div>
       </div>
@@ -748,8 +748,8 @@ export default function MemoPage() {
           </div>
 
           <div className="text-center py-12">
-            <h3 className="text-xl font-semibold text-gray-300 mb-2">No memos yet</h3>
-            <p className="text-gray-400 mb-6">New memos will be added soon.</p>
+            <h3 className="text-xl font-semibold text-gray-300 mb-2">No memo2 yet</h3>
+            <p className="text-gray-400 mb-6">New memo2 will be added soon.</p>
             
             {/* Show add button only in admin mode */}
           {isAuthenticated && (
@@ -758,16 +758,16 @@ export default function MemoPage() {
                 <DialogTrigger asChild>
                   <Button onClick={() => { resetForm(); setIsDialogOpen(true); }} className="gap-2">
                     <Plus className="h-4 w-4" />
-                    Create New Memo
+                    Create New Memo2
                   </Button>
                 </DialogTrigger>
                   <DialogContent className="sm:max-w-[600px] max-h-[80vh] overflow-y-auto">
                     <DialogHeader>
                       <DialogTitle>
-                        {editingContent ? 'Edit Memo' : 'Create New Memo'}
+                        {editingContent ? 'Edit Memo2' : 'Create New Memo2'}
                       </DialogTitle>
                       <DialogDescription>
-                        Create a new memo.
+                        Create a new memo2.
                       </DialogDescription>
                     </DialogHeader>
                     
@@ -937,7 +937,7 @@ export default function MemoPage() {
 
         {/* 슬로건 위치 - 밤하늘 애니메이션과 함께 */}
         <div className="text-center mb-8 relative z-10" style={{ padding: '3rem 1rem' }}>
-          <h2 className="text-2xl font-bold text-white mb-2" onMouseEnter={blockTranslationFeedback} style={{ textShadow: '0 0 6px rgba(0,0,0,0.6)' }}>GPTXGONGMYUNG.COM</h2>
+          <h2 className="text-2xl font-bold text-white mb-2" onMouseEnter={blockTranslationFeedback} style={{ textShadow: '0 0 6px rgba(0,0,0,0.6)' }}>GPTXGONGMYUNG.COM - MEMO2</h2>
           <p className="text-gray-400" style={{ textShadow: '0 0 6px rgba(0,0,0,0.6)' }}>Our 🌿Slogan</p>
           <p className="text-gray-400" style={{ textShadow: '0 0 6px rgba(0,0,0,0.6)' }}>&quot;We&apos;re just. That kind of group!&quot;</p>
         {isAuthenticated && (
@@ -955,7 +955,7 @@ export default function MemoPage() {
                       {editingContent ? 'Edit Memo' : 'Create New Memo'}
                     </DialogTitle>
                     <DialogDescription>
-                      Create a new memo.
+                      Create a new memo2.
                     </DialogDescription>
                   </DialogHeader>
                   

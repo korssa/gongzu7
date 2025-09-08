@@ -849,7 +849,7 @@ export default function Home() {
                                alt={latestApp.name}
                                fill
                                unoptimized={isBlobUrl(latestApp.screenshotUrls[0])}
-                               className="object-cover object-center transition-transform duration-300 group-hover:scale-105"
+                               className="object-cover object-center"
                              />
                           ) : (
                             <div className="absolute inset-0 w-full h-full flex items-center justify-center text-6xl">
@@ -1134,7 +1134,7 @@ export default function Home() {
                 &quot;We&apos;re just. that kind of group!&quot;
               </p>
               <p className="text-sm text-gray-400 notranslate" translate="no" style={{translate: 'no'}} onMouseEnter={blockTranslationFeedback}>
-                — Since 2025
+                — Since 2025 Version 1.1
               </p>
               <button
                 onClick={() => {

@@ -51,7 +51,7 @@ export interface FilterOptions {
 }
 
 // App Story, News, Memo를 위한 새로운 타입들
-export type ContentType = "appstory" | "news" | "memo";
+export type ContentType = "appstory" | "news" | "memo" | "memo2";
 
 export interface ContentItem {
   id: string;
