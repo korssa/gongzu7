@@ -482,8 +482,8 @@ button[data-nextjs-toast-wrapper] {
 
 body {
   top: 0 !important;
-  margin-top: 40px !important; /* 구글 번역 바 + 여백 공간 확보 */
-  background-color: black !important; /* 여백 영역 검정색 배경 */
+  margin-top: 0 !important; /* 모든 페이지에서 최상단 여백 제거 */
+  background-color: black !important;
 }
 
 /* 관리자 모드일 때 번역기 완전 숨김 및 차단 */
@@ -559,13 +559,13 @@ body.admin-mode [data-radix-select-viewport] {
   display: none !important;
 }
 
-/* 번역 모드일 때 추가 여백 */
+/* 번역 모드일 때도 여백 제거 */
 body.translated-ltr {
-  margin-top: 40px !important;
+  margin-top: 0 !important;
 }
 
 body.translated-rtl {
-  margin-top: 40px !important;
+  margin-top: 0 !important;
 }
 
 /* 구글 번역 로고 및 텍스트 색상 조정 */

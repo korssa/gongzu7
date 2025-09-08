@@ -794,7 +794,7 @@ export default function Home() {
         onSearchChange={setSearchQuery}
       />
       
-                           <main className="container mx-auto py-6 max-w-6xl" style={{ maxWidth: '1152px' }}>
+                           <main className="container mx-auto max-w-6xl" style={{ maxWidth: '1152px' }}>
          <div className="mb-6 text-center">
            <h1 className="relative inline-block text-4xl font-extrabold tracking-tight text-transparent bg-clip-text shine-text mb-0">
              <span className="notranslate" translate="no">GPT X GONGMYUNG.COM</span>
