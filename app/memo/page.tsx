@@ -564,7 +564,7 @@ export default function MemoPage() {
 
         <canvas id="skyCanvas"></canvas>
         
-        <div className="container mx-auto py-6 max-w-6xl px-4 relative z-10">
+        <div className="container mx-auto max-w-6xl px-4 relative z-10">
           {/* Top Navigation */}
           <div className="flex items-center justify-between mb-6">
             <Link 
@@ -688,7 +688,7 @@ export default function MemoPage() {
         <canvas id="skyCanvas"></canvas>
         <SoftGlowStar />
         
-        <div className="container mx-auto py-6 max-w-6xl px-4 relative z-10">
+        <div className="container mx-auto max-w-6xl px-4 relative z-10">
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-amber-400 mx-auto"></div>
             <p className="text-gray-400 mt-4">Loading memos...</p>
@@ -732,7 +732,7 @@ export default function MemoPage() {
 
         <canvas id="skyCanvas"></canvas>
         
-        <div className="container mx-auto py-6 max-w-6xl px-4 relative z-10">
+        <div className="container mx-auto max-w-6xl px-4 relative z-10">
           {/* Top Navigation */}
           <div className="flex items-center justify-between mb-6">
             <Link 
