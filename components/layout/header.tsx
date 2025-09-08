@@ -39,7 +39,7 @@ export function Header({
             alt="Logo"
             className="h-8 w-auto object-contain"
           />
-          <span className="text-white text-sm font-medium tracking-wide">
+          <span className="text-white text-sm font-medium tracking-wide notranslate" translate="no">
             SINCE 2025
           </span>
         </div>

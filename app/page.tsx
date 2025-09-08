@@ -1134,7 +1134,7 @@ export default function Home() {
                 &quot;We&apos;re just. that kind of group!&quot;
               </p>
               <p className="text-sm text-gray-400 notranslate" translate="no" style={{translate: 'no'}} onMouseEnter={blockTranslationFeedback}>
-                — Since 2025 Version 1.1
+                <span className="notranslate" translate="no">— Since 2025 Version 1.1</span>
               </p>
               <button
                 onClick={() => {
