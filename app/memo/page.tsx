@@ -938,8 +938,8 @@ export default function MemoPage() {
         {/* 슬로건 위치 - 밤하늘 애니메이션과 함께 */}
         <div className="text-center relative z-10" style={{ padding: '1rem' }}>
           <h2 className="text-2xl font-bold text-white mb-2 notranslate" translate="no" style={{ textShadow: '0 0 6px rgba(0,0,0,0.6)' }}>GPTXGONGMYUNG.COM</h2>
-          <p className="text-gray-400 notranslate" translate="no" style={{ textShadow: '0 0 6px rgba(0,0,0,0.6)' }}>Our 🌿Slogan</p>
-          <p className="text-gray-400" style={{ textShadow: '0 0 6px rgba(0,0,0,0.6)' }}>&quot;We&apos;re just. That kind of group!&quot;</p>
+          <p className="text-gray-400" style={{ textShadow: '0 0 6px rgba(0,0,0,0.6)' }}>Our 🌿Slogan</p>
+          <p className="text-gray-400 notranslate" translate="no" style={{ textShadow: '0 0 6px rgba(0,0,0,0.6)' }}>&quot;We&apos;re just. That kind of group!&quot;</p>
         {isAuthenticated && (
           <div className="mt-4">
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
