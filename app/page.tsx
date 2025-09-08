@@ -1144,7 +1144,7 @@ export default function Home() {
                 className="text-sm text-blue-400 hover:text-blue-300 hover:underline inline-block transition-colors duration-200 cursor-pointer bg-transparent border-none p-0 mt-2"
                 onMouseEnter={blockTranslationFeedback}
               >
-                👉 See That Group
+                <span onMouseEnter={blockTranslationFeedback}>👉 See That Group</span>
               </button>
             </div>
            
@@ -1153,8 +1153,9 @@ export default function Home() {
               onClick={createAdminButtonHandler(handleCopyrightClick)}
               className="cursor-pointer hover:text-gray-300 transition-colors text-sm text-white"
               title="관리자 모드"
+              onMouseEnter={blockTranslationFeedback}
             >
-              <span className="notranslate" translate="no">© 2025 gongmyung.com. All rights reserved.</span>
+              <span className="notranslate" translate="no" onMouseEnter={blockTranslationFeedback}>© 2025 gongmyung.com. All rights reserved.</span>
             </span>
             
                          {/* 관리자 모드일 때만 표시되는 업로드 버튼 및 카테고리 필터 */}
