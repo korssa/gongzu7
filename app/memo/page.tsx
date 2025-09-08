@@ -554,6 +554,18 @@ export default function MemoPage() {
               radial-gradient(circle at 10% 10%, rgba(255,255,255,.06), transparent 60%),
               radial-gradient(circle at 50% 70%, rgba(200,255,255,.05), transparent 55%);
           }
+          
+          /* 테마 고정 - 모바일에서 검정 배경 유지 */
+          html, body {
+            background-color: #000000 !important;
+            color-scheme: dark !important;
+          }
+          
+          /* 링크 영역 테마 고정 */
+          a, .bg-black {
+            background-color: #000000 !important;
+            color: #ffffff !important;
+          }
         `}} />
 
         <canvas id="skyCanvas"></canvas>
@@ -676,6 +688,18 @@ export default function MemoPage() {
               radial-gradient(circle at 10% 10%, rgba(255,255,255,.06), transparent 60%),
               radial-gradient(circle at 50% 70%, rgba(200,255,255,.05), transparent 55%);
           }
+          
+          /* 테마 고정 - 모바일에서 검정 배경 유지 */
+          html, body {
+            background-color: #000000 !important;
+            color-scheme: dark !important;
+          }
+          
+          /* 링크 영역 테마 고정 */
+          a, .bg-black {
+            background-color: #000000 !important;
+            color: #ffffff !important;
+          }
         `}} />
 
         <canvas id="skyCanvas"></canvas>
@@ -719,6 +743,18 @@ export default function MemoPage() {
               radial-gradient(circle at 80% 40%, rgba(255,255,255,.06), transparent 60%),
               radial-gradient(circle at 10% 10%, rgba(255,255,255,.06), transparent 60%),
               radial-gradient(circle at 50% 70%, rgba(200,255,255,.05), transparent 55%);
+          }
+          
+          /* 테마 고정 - 모바일에서 검정 배경 유지 */
+          html, body {
+            background-color: #000000 !important;
+            color-scheme: dark !important;
+          }
+          
+          /* 링크 영역 테마 고정 */
+          a, .bg-black {
+            background-color: #000000 !important;
+            color: #ffffff !important;
           }
         `}} />
 
@@ -906,6 +942,18 @@ export default function MemoPage() {
               radial-gradient(circle at 10% 10%, rgba(255,255,255,.06), transparent 60%),
               radial-gradient(circle at 50% 70%, rgba(200,255,255,.05), transparent 55%);
           }
+          
+          /* 테마 고정 - 모바일에서 검정 배경 유지 */
+          html, body {
+            background-color: #000000 !important;
+            color-scheme: dark !important;
+          }
+          
+          /* 링크 영역 테마 고정 */
+          a, .bg-black {
+            background-color: #000000 !important;
+            color: #ffffff !important;
+          }
         `
       }} />
 
@@ -914,10 +962,10 @@ export default function MemoPage() {
 
       <div className="container mx-auto py-6 max-w-6xl px-4 relative z-10">
         {/* Top Navigation */}
-        <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center justify-between mb-6 bg-black">
           <Link 
             href="/"
-            className="flex items-center gap-2 text-white hover:text-amber-400 transition-colors"
+            className="flex items-center gap-2 text-white hover:text-amber-400 transition-colors bg-black"
             onMouseEnter={blockTranslationFeedback}
           >
             <Home className="w-4 h-4" />
