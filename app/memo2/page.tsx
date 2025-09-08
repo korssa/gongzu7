@@ -918,8 +918,13 @@ export default function MemoPage() {
       <div className="moon"></div>
 
       <div className="container mx-auto py-6 max-w-6xl px-4 relative z-10">
-        {/* Top Navigation */}
-        <div className="flex items-center justify-between mb-6 bg-black">
+        {/* 구글 번역 위젯 */}
+        <div className="flex justify-end mb-4">
+          <GoogleTranslateWidget />
+        </div>
+
+        {/* HOME 버튼 */}
+        <div className="mb-6">
           <Link 
             href="/"
             className="flex items-center gap-2 text-white hover:text-amber-400 transition-colors bg-black"
@@ -928,15 +933,12 @@ export default function MemoPage() {
             <Home className="w-4 h-4" />
             Home
           </Link>
-          
-          {/* 구글 번역 위젯 */}
-          <GoogleTranslateWidget />
         </div>
 
         {/* 슬로건 위치 - 밤하늘 애니메이션과 함께 */}
         <div className="text-center relative z-10" style={{ padding: '1rem' }}>
-          <h2 className="text-2xl font-bold text-white mb-2" onMouseEnter={blockTranslationFeedback} style={{ textShadow: '0 0 6px rgba(0,0,0,0.6)' }}>GPTXGONGMYUNG.COM</h2>
-          <p className="text-gray-400" style={{ textShadow: '0 0 6px rgba(0,0,0,0.6)' }}>Our 🌿Slogan</p>
+          <h2 className="text-2xl font-bold text-white mb-2 notranslate" translate="no" style={{ textShadow: '0 0 6px rgba(0,0,0,0.6)' }}>GPTXGONGMYUNG.COM</h2>
+          <p className="text-gray-400 notranslate" translate="no" style={{ textShadow: '0 0 6px rgba(0,0,0,0.6)' }}>Our 🌿Slogan</p>
           <p className="text-gray-400" style={{ textShadow: '0 0 6px rgba(0,0,0,0.6)' }}>&quot;We&apos;re just. That kind of group!&quot;</p>
         {isAuthenticated && (
           <div className="mt-4">
