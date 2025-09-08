@@ -9,7 +9,7 @@ export type MemoDraft = {
 };
 
 type MemoStorageShape = {
-  drafts: Record<string, MemoDraft | undefined>; // key: type (e.g., 'app-story', 'news')
+  drafts: Record<string, MemoDraft | undefined>; // key: type (e.g., 'memo', 'memo2', 'app-story', 'news')
 };
 
 const STORAGE_KEY = 'memo_storage';

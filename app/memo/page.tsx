@@ -24,7 +24,6 @@ import { ContentItem, ContentFormData, ContentType } from "@/types";
 import { useAdmin } from "@/hooks/use-admin";
 import { uploadFile } from "@/lib/storage-adapter";
 import { blockTranslationFeedback, createAdminButtonHandler } from "@/lib/translation-utils";
-import { loadContentsFromBlob } from "@/lib/data-loader";
 import { loadMemoDraft, saveMemoDraft, clearMemoDraft } from "@/lib/memo-storage";
 import Link from "next/link";
 import SoftGlowStar from "@/components/soft-glow-star";
@@ -295,27 +294,18 @@ export default function MemoPage() {
       try {
         setLoading(true);
         
-        // 먼저 기존 API에서 memo 타입 콘텐츠 로드 시도
-        console.log('📝 [Memo] Loading memo content from API...');
-        const res = await fetch(`/api/content?type=memo`);
+        // 메모 전용 API에서 콘텐츠 로드
+        console.log('📝 [Memo] Loading memo content from dedicated API...');
+        const res = await fetch(`/api/memo`);
         
         if (res.ok) {
           const data = await res.json();
           const finalContents = isAuthenticated ? data : data.filter((c: ContentItem) => c.isPublished);
           setContents(finalContents);
-          console.log('📝 [Memo] Content loaded from API:', finalContents.length, 'items');
+          console.log('📝 [Memo] Content loaded from dedicated API:', finalContents.length, 'items');
         } else {
-          console.warn('📝 [Memo] API load failed, trying Blob...');
-          // API 실패 시 Blob에서 로드 시도
-          const blobContents = await loadContentsFromBlob();
-          console.log('📝 [Memo] Total content loaded from Blob:', blobContents.length, 'items');
-          
-          const filteredBlobContents = blobContents.filter((c: ContentItem) => c.type === 'memo');
-          console.log('📝 [Memo] Filtered memo content:', filteredBlobContents.length, 'items');
-          
-          const finalContents = isAuthenticated ? filteredBlobContents : filteredBlobContents.filter((c: ContentItem) => c.isPublished);
-          setContents(finalContents);
-          console.log('📝 [Memo] Final content set from Blob:', finalContents.length, 'items');
+          console.warn('📝 [Memo] Dedicated API load failed');
+          setContents([]);
         }
       } catch (err) {
         console.error('📝 [Memo] Failed to load content:', err);
@@ -428,7 +418,7 @@ export default function MemoPage() {
         }
       }
 
-      const url = editingContent ? `/api/content` : `/api/content`;
+      const url = editingContent ? `/api/memo` : `/api/memo`;
       const method = editingContent ? 'PUT' : 'POST';
       const body = editingContent 
         ? { id: editingContent.id, ...formData, imageUrl } 
@@ -447,7 +437,7 @@ export default function MemoPage() {
         
         // 콘텐츠 목록 다시 로드
         try {
-          const res = await fetch(`/api/content?type=memo`);
+          const res = await fetch(`/api/memo`);
           if (res.ok) {
             const data = await res.json();
             setContents(isAuthenticated ? data : data.filter((c: ContentItem) => c.isPublished));
@@ -476,14 +466,14 @@ export default function MemoPage() {
     if (!confirm('Are you sure you want to delete?')) return;
 
     try {
-      const response = await fetch(`/api/content?id=${id}`, {
+      const response = await fetch(`/api/memo?id=${id}`, {
         method: 'DELETE',
       });
 
       if (response.ok) {
         // 콘텐츠 목록 다시 로드
         try {
-          const res = await fetch(`/api/content?type=memo`);
+          const res = await fetch(`/api/memo`);
           if (res.ok) {
             const data = await res.json();
             setContents(isAuthenticated ? data : data.filter((c: ContentItem) => c.isPublished));
@@ -516,7 +506,7 @@ export default function MemoPage() {
   // 게시 상태 토글
   const togglePublish = async (content: ContentItem) => {
     try {
-      const response = await fetch('/api/content', {
+      const response = await fetch('/api/memo', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -526,7 +516,7 @@ export default function MemoPage() {
       });
 
       if (response.ok) {
-        const res = await fetch(`/api/content?type=memo`);
+        const res = await fetch(`/api/memo`);
         const data = await res.json();
         setContents(isAuthenticated ? data : data.filter((c: ContentItem) => c.isPublished));
       }

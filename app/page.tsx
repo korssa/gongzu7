@@ -1136,16 +1136,28 @@ export default function Home() {
               <p className="text-sm text-gray-400 notranslate" translate="no" style={{translate: 'no'}} onMouseEnter={blockTranslationFeedback}>
                 — Since 2025 Version 1.1
               </p>
-              <button
-                onClick={() => {
-                  // 독립적인 메모장 페이지로 이동
-                  window.location.href = '/memo';
-                }}
-                className="text-sm text-blue-400 hover:text-blue-300 hover:underline inline-block transition-colors duration-200 cursor-pointer bg-transparent border-none p-0 mt-2"
-                onMouseEnter={blockTranslationFeedback}
-              >
-                👉 See That Group
-              </button>
+              <div className="flex gap-4 justify-center mt-2">
+                <button
+                  onClick={() => {
+                    // 독립적인 메모장 페이지로 이동
+                    window.location.href = '/memo';
+                  }}
+                  className="text-sm text-blue-400 hover:text-blue-300 hover:underline inline-block transition-colors duration-200 cursor-pointer bg-transparent border-none p-0"
+                  onMouseEnter={blockTranslationFeedback}
+                >
+                  📝 Memo
+                </button>
+                <button
+                  onClick={() => {
+                    // 독립적인 메모2 페이지로 이동
+                    window.location.href = '/memo2';
+                  }}
+                  className="text-sm text-green-400 hover:text-green-300 hover:underline inline-block transition-colors duration-200 cursor-pointer bg-transparent border-none p-0"
+                  onMouseEnter={blockTranslationFeedback}
+                >
+                  📝 Memo2
+                </button>
+              </div>
             </div>
            
            <div className="border-t border-gray-600 pt-6 mt-6 text-center">
