@@ -189,7 +189,7 @@ export function MailForm({ type, buttonText, buttonDescription, onMouseEnter }: 
           <div className="text-base font-medium group-hover:text-amber-400 transition-colors">
             {buttonText}
           </div>
-                     <div className="text-xs text-gray-400 mt-1 group-hover:text-gray-300 transition-colors">
+                     <div className="text-xs text-gray-400 mt-1 group-hover:text-gray-300 transition-colors notranslate" translate="no">
              {buttonDescription}
            </div>
         </button>
@@ -366,7 +366,7 @@ export function MailForm({ type, buttonText, buttonDescription, onMouseEnter }: 
                     checked={formData.agreeToMarketing}
                     onChange={(e) => handleInputChange("agreeToMarketing", e.target.checked)}
                   />
-                  <span>
+                  <span className="notranslate" translate="no">
                     I agree to receive occasional news and offers from gongmyung.com via email.  
                     <br className="sm:hidden" />
                     <em className="text-xs text-gray-500">(*Required to receive your free app.)</em>
