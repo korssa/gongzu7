@@ -849,8 +849,7 @@ export default function Home() {
                                alt={latestApp.name}
                                fill
                                unoptimized={isBlobUrl(latestApp.screenshotUrls[0])}
-                               className="object-cover object-center transition-transform duration-300 group-hover:scale-105"
-                             />
+                               className="object-cover object-center"  />
                           ) : (
                             <div className="absolute inset-0 w-full h-full flex items-center justify-center text-6xl">
                               📱
