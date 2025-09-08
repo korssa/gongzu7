@@ -1151,6 +1151,13 @@ export default function MemoPage() {
           ))}
         </div>
       </div>
+      
+      {/* 메모 페이지에서 body 여백 제거 */}
+      <style jsx global>{`
+        body {
+          margin-top: 0 !important;
+        }
+      `}</style>
     </div>
   );
 }
